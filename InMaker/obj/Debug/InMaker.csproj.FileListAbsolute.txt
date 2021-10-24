@@ -1,0 +1,14 @@
+C:\Users\ssw90\source\repos\InMaker\bin\Debug\InMaker.exe.config
+C:\Users\ssw90\source\repos\InMaker\bin\Debug\InMaker.exe
+C:\Users\ssw90\source\repos\InMaker\bin\Debug\InMaker.pdb
+C:\Users\ssw90\source\repos\InMaker\obj\Debug\InMaker.csproj.AssemblyReference.cache
+C:\Users\ssw90\source\repos\InMaker\obj\Debug\InMaker.csproj.CoreCompileInputs.cache
+C:\Users\ssw90\source\repos\InMaker\obj\Debug\InMaker.exe
+C:\Users\ssw90\source\repos\InMaker\obj\Debug\InMaker.pdb
+C:\Users\ssw90\source\projs\InMaker\bin\Debug\InMaker.exe.config
+C:\Users\ssw90\source\projs\InMaker\bin\Debug\InMaker.exe
+C:\Users\ssw90\source\projs\InMaker\bin\Debug\InMaker.pdb
+C:\Users\ssw90\source\projs\InMaker\obj\Debug\InMaker.csproj.AssemblyReference.cache
+C:\Users\ssw90\source\projs\InMaker\obj\Debug\InMaker.csproj.CoreCompileInputs.cache
+C:\Users\ssw90\source\projs\InMaker\obj\Debug\InMaker.exe
+C:\Users\ssw90\source\projs\InMaker\obj\Debug\InMaker.pdb

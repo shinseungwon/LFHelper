@@ -1,0 +1,7 @@
+C:\Users\ssw90\source\projs\Regexer\bin\Debug\Regexer.exe.config
+C:\Users\ssw90\source\projs\Regexer\bin\Debug\Regexer.exe
+C:\Users\ssw90\source\projs\Regexer\bin\Debug\Regexer.pdb
+C:\Users\ssw90\source\projs\Regexer\obj\Debug\Regexer.csproj.AssemblyReference.cache
+C:\Users\ssw90\source\projs\Regexer\obj\Debug\Regexer.csproj.CoreCompileInputs.cache
+C:\Users\ssw90\source\projs\Regexer\obj\Debug\Regexer.exe
+C:\Users\ssw90\source\projs\Regexer\obj\Debug\Regexer.pdb
