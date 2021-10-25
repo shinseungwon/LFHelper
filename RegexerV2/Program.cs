@@ -20,7 +20,7 @@ namespace RegexerV2
                 Console.WriteLine("Input Command ...");
                 string input = Console.ReadLine();
 
-                if(input == "r")
+                if (input == "r")
                 {
                     menu = Load();
                     continue;
@@ -34,9 +34,9 @@ namespace RegexerV2
                     }
 
                     if (num > 0 && num <= menu)
-                    {                        
+                    {
                         string command = opsStr[num - 1];
-                        string[] commands = command.Split('\n');                        
+                        string[] commands = command.Split('\n');
                         if (commands.Length == 3)
                         {
                             string res = commands[0].Trim() + Environment.NewLine;
@@ -48,14 +48,28 @@ namespace RegexerV2
                                 string regex = commands[1].Trim();
                                 string sas = sa[i].Trim();
                                 if (sas.Length > 0)
-                                {                                    
-                                    string[] sasa = sas.Split(' ');
-                                    int sasac = sasa.Length;
+                                {
+                                    string[] sasa = sas.Replace('\t', ' ')
+                                    .Replace("     ", " ")
+                                    .Replace("    ", " ")
+                                    .Replace("   ", " ")
+                                    .Replace(" ", " ")                                    
+                                    .Split(' ');
+                                    List<string> sasal = new List<string>();
 
-                                    for (j = 0; j < sasac; j++)
+                                    for (j = 0; j < sasa.Length; j++)
                                     {
-                                        regex = regex.Replace("{" + j + "}", sasa[j]);
+                                        if (sasa[j].Trim().Length > 0)
+                                        {
+                                            sasal.Add(sasa[j]);
+                                        }
                                     }
+
+                                    for (j = 0; j < sasal.Count; j++)
+                                    {
+                                        regex = regex.Replace("{" + j + "}", sasa[j]);                                        
+                                    }
+
                                     res += regex + Environment.NewLine;
                                 }
                             }
