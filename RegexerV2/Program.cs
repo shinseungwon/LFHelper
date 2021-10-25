@@ -60,7 +60,7 @@ namespace RegexerV2
                                 }
                             }
                             res += commands[2].Trim() + Environment.NewLine;
-                            Console.WriteLine(res);
+                            //Console.WriteLine(res);
                             Clipboard.SetText(res);
                         }
                         else
