@@ -1,0 +1,3 @@
+prestring
+col1 = '{0}' where colb = '{1}'
+poststring
