@@ -24,7 +24,7 @@ namespace RegexerV2
                 {
                     menu = Load();
                     continue;
-                }
+                }                
 
                 if (int.TryParse(input, out int num))
                 {
@@ -39,43 +39,37 @@ namespace RegexerV2
                         string[] commands = command.Split('\n');
                         if (commands.Length == 3)
                         {
-                            string res = commands[0].Trim() + Environment.NewLine;
-                            string s = Clipboard.GetText();
-                            string[] sa = s.Split('\n');
-                            int sc = sa.Length, i, j;
-                            for (i = 0; i < sc; i++)
+                            string res = commands[0].Trim() + Environment.NewLine;                            
+                            int i, j;
+                            
+                            List<string> sa = Trimming(Clipboard.GetText());
+
+                            for (i = 0; i < sa.Count; i++)
                             {
                                 string regex = commands[1].Trim();
-                                string sas = sa[i].Trim();
-                                if (sas.Length > 0)
+                                string[] sasa = sa[i].Split(" ");
+                                List<string> sasal = new List<string>();
+
+                                for (j = 0; j < sasa.Length; j++)
                                 {
-                                    string[] sasa = sas.Replace('\t', ' ')
-                                    .Replace("     ", " ")
-                                    .Replace("    ", " ")
-                                    .Replace("   ", " ")
-                                    .Replace(" ", " ")                                    
-                                    .Split(' ');
-                                    List<string> sasal = new List<string>();
-
-                                    for (j = 0; j < sasa.Length; j++)
+                                    if (sasa[j].Length > 0)
                                     {
-                                        if (sasa[j].Trim().Length > 0)
-                                        {
-                                            sasal.Add(sasa[j]);
-                                        }
-                                    }
-
-                                    for (j = 0; j < sasal.Count; j++)
-                                    {
-                                        regex = regex.Replace("{" + j + "}", sasa[j]);                                        
-                                    }
-
-                                    res += regex + Environment.NewLine;
+                                        sasal.Add(sasa[j].Trim());
+                                    } 
+                                }                                
+                                
+                                for (j = 0; j < sasal.Count; j++)
+                                {                                    
+                                    regex = regex.Replace("{" + j + "}", sasal[j]);
                                 }
+
+                                res += regex + Environment.NewLine;
+                                
                             }
                             res += commands[2].Trim() + Environment.NewLine;
-                            //Console.WriteLine(res);
+                            
                             Clipboard.SetText(res);
+                            Console.WriteLine(sa.Count + "Lines");
                         }
                         else
                         {
@@ -88,6 +82,21 @@ namespace RegexerV2
                     }
                 }
             }
+        }
+
+        static List<string> Trimming(string s)
+        {            
+            string[] sa = s.Split('\n');
+            List<string> l = new List<string>();            
+
+            for(int i = 0;i < sa.Length;i++){
+                sa[i] = sa[i].Replace('\t', ' ').Replace("     ", " ").Replace("    ", " ").Replace("   ", " ").Replace("  ", " ");
+                if(!l.Contains(sa[i]) && sa[i].Length > 3){
+                    l.Add(sa[i]);
+                }
+            }
+
+            return l;
         }
 
         static int Load()
