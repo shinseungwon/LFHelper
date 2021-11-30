@@ -1,0 +1,3 @@
+--start
+update po set pogroup = '{0}' where pokey = '{1}'
+--end

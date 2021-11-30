@@ -1,0 +1,3 @@
+--
+update orders set userdefine09 = '' where orderkey = '{0}'
+--

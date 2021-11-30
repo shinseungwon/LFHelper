@@ -101,6 +101,7 @@ namespace RegexerV2
 
         static int Load()
         {
+            Console.WriteLine(Directory.GetCurrentDirectory());
             menu = 0;
             ops.Clear();
             opsStr.Clear();
@@ -123,6 +124,7 @@ namespace RegexerV2
     {
         public static void SetText(string text)
         {
+            Console.WriteLine(text.Length);
             var powershell = new Process
             {
                 StartInfo = new ProcessStartInfo

@@ -8,24 +8,28 @@
     "net5.0": []
   },
   "packageFolders": {
-    "C:\\Users\\ssw90\\.nuget\\packages\\": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\JeffreyShin\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
+    "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\ssw90\\source\\repos\\LFHelper\\RegexerV2\\RegexerV2.csproj",
+      "projectUniqueName": "C:\\Users\\JeffreyShin\\Source\\Repos\\LFHelper\\RegexerV2\\RegexerV2.csproj",
       "projectName": "RegexerV2",
-      "projectPath": "C:\\Users\\ssw90\\source\\repos\\LFHelper\\RegexerV2\\RegexerV2.csproj",
-      "packagesPath": "C:\\Users\\ssw90\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\ssw90\\source\\repos\\LFHelper\\RegexerV2\\obj\\",
+      "projectPath": "C:\\Users\\JeffreyShin\\Source\\Repos\\LFHelper\\RegexerV2\\RegexerV2.csproj",
+      "packagesPath": "C:\\Users\\JeffreyShin\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\JeffreyShin\\Source\\Repos\\LFHelper\\RegexerV2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
+        "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
       ],
       "configFilePaths": [
-        "C:\\Users\\ssw90\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\JeffreyShin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
