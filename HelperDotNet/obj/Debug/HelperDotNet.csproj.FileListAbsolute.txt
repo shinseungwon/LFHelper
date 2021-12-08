@@ -1,5 +1,0 @@
-C:\Users\JeffreyShin\source\repos\SSWAREV3\HelperDotNet\obj\Debug\HelperDotNet.csproj.CoreCompileInputs.cache
-C:\Users\JeffreyShin\source\repos\SSWAREV3\HelperDotNet\bin\Debug\HelperDotNet.dll
-C:\Users\JeffreyShin\source\repos\SSWAREV3\HelperDotNet\bin\Debug\HelperDotNet.pdb
-C:\Users\JeffreyShin\source\repos\SSWAREV3\HelperDotNet\obj\Debug\HelperDotNet.dll
-C:\Users\JeffreyShin\source\repos\SSWAREV3\HelperDotNet\obj\Debug\HelperDotNet.pdb
