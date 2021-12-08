@@ -1,6 +1,11 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\RegexerV2",
+    "\\RegexerV3",
+    "\\RegexerV3\\RegexerV3",
+    "\\RegexerV3\\RegexerV3\\RegexerV3"
   ],
+  "SelectedNode": "\\RegexerV3",
   "PreviewInSolutionExplorer": false
 }
