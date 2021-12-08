@@ -1,0 +1,6 @@
+ip:172.22.8.143
+catalog:KRLOCAL
+
+brand:HM
+stlkey:0000344567
+endkey:0000344567
