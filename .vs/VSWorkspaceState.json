@@ -1,11 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\RegexerV2",
-    "\\RegexerV3",
-    "\\RegexerV3\\RegexerV3",
-    "\\RegexerV3\\RegexerV3\\RegexerV3"
+    "\\PickslipPrinterV3"
   ],
-  "SelectedNode": "\\RegexerV3",
+  "SelectedNode": "\\PickslipPrinterV3",
   "PreviewInSolutionExplorer": false
 }

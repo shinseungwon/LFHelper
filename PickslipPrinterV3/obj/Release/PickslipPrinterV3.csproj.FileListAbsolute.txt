@@ -1,0 +1,2 @@
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterV3\obj\Release\PickslipPrinterV3.csproj.AssemblyReference.cache
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterV3\obj\Release\PickslipPrinterV3.csproj.CoreCompileInputs.cache

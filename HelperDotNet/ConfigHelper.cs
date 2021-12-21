@@ -42,6 +42,28 @@ namespace HelperDotNet
             }
         }
 
+        public string get(string key)
+        {
+            if (Configs.ContainsKey(key))
+            {
+                return Configs[key];
+            }
+            else return "";
+        }
+
+        public string[] gets(string key, char div = ' ')
+        {
+            string s = get(key);
+            if (s == "")
+            {
+                return null;
+            }
+            else
+            {
+                return s.Split(new char[] { div });
+            }
+        }
+
         public static string Encrypt(string key, string data)
         {
             Rijndael r = Rijndael.Create();
