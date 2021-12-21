@@ -9,7 +9,7 @@ namespace HelperDotNet
     /// </summary>
     public static class Tools
     {
-        static string TrimStr(string s)
+        public static string TrimStr(string s)
         {
             StringBuilder sb = new StringBuilder();
             short space = 0; //0 initial, 1 inserted one time
@@ -40,7 +40,7 @@ namespace HelperDotNet
             return sb.ToString();
         }
 
-        static List<string> SplitLine(string s)
+        public static List<string> SplitLine(string s)
         {
             string[] sa = s.Split('\n');
             List<string> l = new List<string>();

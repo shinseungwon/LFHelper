@@ -7,4 +7,3 @@ C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Deb
 C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.csproj.CoreCompileInputs.cache
 C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.exe
 C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.pdb
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.csproj.CopyComplete

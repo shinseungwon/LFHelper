@@ -2,9 +2,7 @@
 using HelperDotNet;
 using System.IO;
 using System.Data;
-using System.Diagnostics;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PoGroupUpdater
 {
@@ -30,21 +28,19 @@ namespace PoGroupUpdater
             DbHelper dh = new DbHelper(connectionString);
             Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
             dh.SetLogger(l);
-            DataSet ds = new DataSet();
-            dh.CallQuery(query, ref ds);
 
             string err;
             string target = File.ReadAllText(@"Target.txt");
-            List<string> targets = SplitLine(target);
+            List<string> targets = Tools.SplitLine(target);
 
+            bool error = false;
             foreach (string s in targets)
             {
-                //Console.WriteLine(s);
                 string[] elements = s.Split(' ');
 
                 if (elements.Length != 2)
                 {
-                    err = "Each line should have 2 elements (text : " + s + ")";
+                    err = "Each line should have 2 elements (text : " + s + ") -> this line will be excluded";
                     Console.WriteLine(err);
                     l.WriteText(err);
                 }
@@ -52,9 +48,11 @@ namespace PoGroupUpdater
                 {
                     if (elements[1].Length != 10)
                     {
-                        err = "line value check -> 1st value : pogroup, 2nd value : pokey " + elements[1].Length;
+                        err = "Please check text -> 1st value : pogroup, 2nd value : pokey, text -> " + s;
                         Console.WriteLine(err);
                         l.WriteText(err);
+                        error = true;
+                        break;
                     }
                     else
                     {
@@ -71,66 +69,22 @@ namespace PoGroupUpdater
                         {
                             Console.WriteLine("PO Exists, Pokey : " + elements[1] + " set pogroup as " + elements[0]);
                             //Console.Write(" update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "'");
-                            query += " update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "'" + Environment.NewLine;
+                            query += "update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "' " + Environment.NewLine;
                         }
                     }
                 }
             }
 
-            Console.Write("Confirm update?(Y/N) : ");
-            string res = Console.ReadLine();
-            if (res == "Y" || res == "y")
+            if (!error)
             {
-                Console.WriteLine(query);
-            }
-        }
-
-        static string TrimStr(string s)
-        {
-            StringBuilder sb = new StringBuilder();
-            short space = 0; //0 initial, 1 inserted one time
-            for (int i = 0; i < s.Length; i++)
-            {
-                char x = s[i];
-                if (x >= 32 && x < 127) //is visible character
+                Console.Write("Confirm update?(Y/N) : ");
+                string res = Console.ReadLine();
+                if (res == "Y" || res == "y")
                 {
-                    if (x == ' ')
-                    {
-                        if (space == 0)
-                        {
-                            sb.Append(s[i]);
-                            space = 1;
-                        }
-                    }
-                    else
-                    {
-                        if (space == 1)
-                        {
-                            space = 0;
-                        }
-                        sb.Append(s[i]);
-                    }
+                    //dh.CallQuery(query);
+                    Console.WriteLine(query);
                 }
             }
-
-            return sb.ToString();
-        }
-
-        static List<string> SplitLine(string s)
-        {
-            string[] sa = s.Split('\n');
-            List<string> l = new List<string>();
-
-            for (int i = 0; i < sa.Length; i++)
-            {
-                sa[i] = TrimStr(sa[i].Replace('\t', ' '));
-                if (!l.Contains(sa[i]) && sa[i].Length > 3)
-                {
-                    l.Add(sa[i]);
-                }
-            }
-
-            return l;
         }
     }
 }
