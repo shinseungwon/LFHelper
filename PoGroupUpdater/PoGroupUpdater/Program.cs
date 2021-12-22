@@ -57,9 +57,9 @@ namespace PoGroupUpdater
                     else
                     {
                         DataSet dsCnt = new DataSet();
-                        dh.CallQuery("select count(1) as cnt from po(nolock) where pokey = '" + elements[1] + "'", ref dsCnt);
+                        dh.CallQuery("select PoGroup from po(nolock) where pokey = '" + elements[1] + "'", ref dsCnt);
 
-                        if (dsCnt.Tables[0].Rows[0]["cnt"].ToString() != "1")
+                        if (dsCnt.Tables[0].Rows.Count != 1)
                         {
                             err = "line value check -> 1st value : pogroup, 2nd value : pokey / or PO not exists!";
                             Console.WriteLine(err);
@@ -67,6 +67,11 @@ namespace PoGroupUpdater
                         }
                         else
                         {
+                            string poGroup = dsCnt.Tables[0].Rows[0]["PoGroup"].ToString();
+                            if(poGroup.Length == 0)
+                            {
+                                Console.WriteLine("PO " + elements[1] + " already has PoGroup(" + poGroup + ") please check");
+                            }
                             Console.WriteLine("PO Exists, Pokey : " + elements[1] + " set pogroup as " + elements[0]);
                             //Console.Write(" update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "'");
                             query += "update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "' " + Environment.NewLine;
@@ -83,6 +88,7 @@ namespace PoGroupUpdater
                 {
                     //dh.CallQuery(query);
                     Console.WriteLine(query);
+                    Console.WriteLine("Done!");
                 }
             }
         }
