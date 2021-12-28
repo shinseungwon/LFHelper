@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\PickslipPrinterV3"
+    "\\Tester",
+    "\\Tester\\Tester"
   ],
-  "SelectedNode": "\\PickslipPrinterV3",
+  "SelectedNode": "\\Tester\\Tester\\Program.cs",
   "PreviewInSolutionExplorer": false
 }

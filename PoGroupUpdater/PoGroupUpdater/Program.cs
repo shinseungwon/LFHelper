@@ -24,6 +24,8 @@ namespace PoGroupUpdater
                 + "; User id=" + id + "; Password=" + password + ";";
 
             string query = "";
+            List<string> queries = new List<string>();
+            string queryLine = "";
 
             DbHelper dh = new DbHelper(connectionString);
             Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
@@ -40,42 +42,42 @@ namespace PoGroupUpdater
 
                 if (elements.Length != 2)
                 {
-                    err = "Each line should have 2 elements (text : " + s + ") -> this line will be excluded";
+                    err = "Each line should have 2 elements, this line will be excluded, text -> " + s;
                     Console.WriteLine(err);
                     l.WriteText(err);
                 }
+                else if (elements[1].Length != 10)
+                {
+                    err = "Please check text -> 1st value : pogroup, 2nd value : pokey, text -> " + s;
+                    Console.WriteLine(err);
+                    l.WriteText(err);
+                    error = true;
+                }
                 else
                 {
-                    if (elements[1].Length != 10)
+                    DataSet dsCnt = new DataSet();
+                    dh.CallQuery("select PoGroup from po(nolock) where pokey = '" + elements[1] + "'", ref dsCnt);
+
+                    if (dsCnt.Tables[0].Rows.Count != 1)
                     {
-                        err = "Please check text -> 1st value : pogroup, 2nd value : pokey, text -> " + s;
+                        err = "line value check -> 1st value : pogroup, 2nd value : pokey / or PO not exists!";
                         Console.WriteLine(err);
                         l.WriteText(err);
-                        error = true;
-                        break;
                     }
                     else
                     {
-                        DataSet dsCnt = new DataSet();
-                        dh.CallQuery("select PoGroup from po(nolock) where pokey = '" + elements[1] + "'", ref dsCnt);
+                        string poGroup = dsCnt.Tables[0].Rows[0]["PoGroup"].ToString();
+                        if (poGroup.Length > 0)
+                        {
+                            Console.WriteLine("PO " + elements[1] + " already has PoGroup(" + poGroup + ") please check");
+                        }
+                        Console.WriteLine("PO Exists, Pokey : " + elements[1] + " set pogroup as " + elements[0]);
+                        //Console.Write(" update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "'");
 
-                        if (dsCnt.Tables[0].Rows.Count != 1)
-                        {
-                            err = "line value check -> 1st value : pogroup, 2nd value : pokey / or PO not exists!";
-                            Console.WriteLine(err);
-                            l.WriteText(err);
-                        }
-                        else
-                        {
-                            string poGroup = dsCnt.Tables[0].Rows[0]["PoGroup"].ToString();
-                            if(poGroup.Length == 0)
-                            {
-                                Console.WriteLine("PO " + elements[1] + " already has PoGroup(" + poGroup + ") please check");
-                            }
-                            Console.WriteLine("PO Exists, Pokey : " + elements[1] + " set pogroup as " + elements[0]);
-                            //Console.Write(" update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "'");
-                            query += "update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "' " + Environment.NewLine;
-                        }
+                        queryLine = "update po set pogroup = '" + elements[0] + "' where pokey = '" + elements[1] + "' ";
+                        queries.Add(queryLine);
+
+                        query += queryLine + Environment.NewLine;
                     }
                 }
             }
@@ -87,8 +89,15 @@ namespace PoGroupUpdater
                 if (res == "Y" || res == "y")
                 {
                     //dh.CallQuery(query);
-                    Console.WriteLine(query);
-                    Console.WriteLine("Done!");
+                    //Console.WriteLine(query);
+
+                    foreach (string s in queries)
+                    {
+                        Console.WriteLine(s);
+                        dh.CallQuery(s);
+                    }
+                    Console.WriteLine("Done! (Enter to Close)");
+                    Console.ReadLine();
                 }
             }
         }
