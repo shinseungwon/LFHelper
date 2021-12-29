@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HelperDotNet;
+
+
 
 namespace Tester
 {
@@ -11,16 +15,7 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            //Todo
-            //1.File Watcher
-            //2.Text File Check odd characters
 
-
-            
-            //File Watcher Test
-            string dir = @"TestDir";
-
-            
         }
     }
 }

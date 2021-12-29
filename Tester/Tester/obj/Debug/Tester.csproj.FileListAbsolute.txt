@@ -1,0 +1,9 @@
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\obj\Debug\Tester.csproj.AssemblyReference.cache
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\obj\Debug\Tester.csproj.CoreCompileInputs.cache
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\bin\Debug\Tester.exe.config
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\bin\Debug\Tester.exe
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\bin\Debug\Tester.pdb
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\bin\Debug\HelperDotNet.dll
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\bin\Debug\HelperDotNet.pdb
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\obj\Debug\Tester.exe
+C:\Users\JeffreyShin\source\repos\LFHelper\Tester\Tester\obj\Debug\Tester.pdb
