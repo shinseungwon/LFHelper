@@ -1,0 +1,73 @@
+'line starts with single quote(') is comment (program will not read that line)
+
+ip:172.22.8.143
+catalog:KRLOCAL
+id:superuser
+password:superuser
+
+brand:HM
+route:99
+stlkey:0000346118
+endkey:0000346118
+
+datawindow:02
+
+
+
+'pageinfo:width height marginLeft marginRight marginTop marginBottom
+pageinfo:196 127 5 5 5 5
+
+
+
+'define element -> element1 element2 ... (starts from 1)
+'layer -> later one covers former one
+'element type -> rect text
+
+
+
+'rect:x y w h isFill
+'x, y is based on rect's left down corner is 0, 0
+'isFill -> 0 is not fill, else is fill
+
+rect1:4 4 189 119 0
+rect2:149 89 44 34 1
+
+
+
+'barcode:key x y
+barcode:OrderKey 55 20
+
+
+
+'text:text/size/style/color/x/y
+'text example -> sku: {sku} -> colunm name in bracket will replace selected data
+'size -> font size
+'style -> 0:normal 1:bold 2:Italic 3:BoldItalic 4:UnderLine 8:StrikeThrough 
+'color -> 0:white else:black
+'x, y -> coords
+
+'OrderNo
+text1:HM/14/1/0/170/110
+text2:{OrderNo}/14/1/0/170/95
+
+'Loc
+text3:Loc: {Loc}/18/1/1/75/100
+
+'Sku
+text4:SKU: {SKU}/16/1/1/85/75
+
+'Color
+text5:{Color}/16/1/1/177/74
+
+'Qty
+text6:Qty: {Qty}/16/1/1/170/60
+
+'Loadkey
+text7:Load: /12/0/1/30/63
+text8:{Loadkey}/12/4/1/80/63
+
+'Orderkey
+text9:Order: {OrderKey}/12/0/1/62/49
+
+'Sequence
+text10:{LineNumber}   {TotalAllocQty}   {TotalLines}/10/0/1/100/10

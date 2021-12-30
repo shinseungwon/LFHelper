@@ -1,0 +1,13 @@
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\PickslipPrinterByOrdersV1.exe.config
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\PickslipPrinterByOrdersV1.exe
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\PickslipPrinterByOrdersV1.pdb
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\BouncyCastle.Crypto.dll
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\HelperDotNet.dll
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\itextsharp.dll
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\HelperDotNet.pdb
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\bin\Debug\itextsharp.xml
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\obj\Debug\PickslipPrinterByOrdersV1.csproj.AssemblyReference.cache
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\obj\Debug\PickslipPrinterByOrdersV1.csproj.CoreCompileInputs.cache
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\obj\Debug\PickslipPrinterByOrdersV1.csproj.CopyComplete
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\obj\Debug\PickslipPrinterByOrdersV1.exe
+C:\Users\JeffreyShin\source\repos\LFHelper\PickslipPrinterByOrdersV1\PickslipPrinterByOrdersV1\obj\Debug\PickslipPrinterByOrdersV1.pdb

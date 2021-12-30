@@ -10,7 +10,7 @@ namespace Tester
 {
     public class Works
     {
-        public static void FileWatcherText()
+        public static void FileWatcherTest()
         {
             FileSystemWatcher watcher = new FileSystemWatcher(@"TestDir");
 
