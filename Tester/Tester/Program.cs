@@ -6,9 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HelperDotNet;
-using BarTender;
-
-
 
 namespace Tester
 {
@@ -18,6 +15,7 @@ namespace Tester
         {
             //MyChange
             //MyTest
+            Console.WriteLine("Hello World");
         }
     }
 }
