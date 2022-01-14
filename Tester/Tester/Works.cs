@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HelperDotNet;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -10,6 +12,32 @@ namespace Tester
 {
     public class Works
     {
+        public static void GetHugeColumn()
+        {
+            //2.Connect DB + Call SP
+            string connectionString = "Data Source=" + "172.22.8.143" + ",1433; Initial Catalog=" + "KRWMS"
+                + "; User id=" + "superuser" + "; Password=" + "superuser" + ";";
+
+            string query = "select wsdata from krarchive..wsoutbound_log(nolock) where seqno in ( '257018156', '257025373')";
+
+            DbHelper dh = new DbHelper(connectionString);
+            Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
+            dh.SetLogger(l);
+            DataSet ds = new DataSet();
+            dh.CallQuery(query, ref ds);
+
+            int rowcnt = 0;
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                string xml = r["wsdata"].ToString();
+                string path = @"WsData\";
+                string fullname = "20220114_" + rowcnt + ".xml";
+                File.WriteAllText(fullname, xml);
+                rowcnt++;
+            }
+        }
+
         public static void FileWatcherTest()
         {
             FileSystemWatcher watcher = new FileSystemWatcher(@"TestDir");
