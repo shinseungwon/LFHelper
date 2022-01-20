@@ -12,13 +12,13 @@ namespace Tester
 {
     public class Works
     {
-        public static void GetHugeColumn()
+        public static void GetHugeColumn(string fullname, string query)
         {
             //2.Connect DB + Call SP
             string connectionString = "Data Source=" + "172.22.8.143" + ",1433; Initial Catalog=" + "KRWMS"
                 + "; User id=" + "superuser" + "; Password=" + "superuser" + ";";
 
-            string query = "select wsdata from krarchive..wsoutbound_log(nolock) where seqno in ( '257018156', '257025373')";
+            //string query = "select wsdata from krarchive..wsoutbound_log(nolock) where seqno in ( '257018156', '257025373')";
 
             DbHelper dh = new DbHelper(connectionString);
             Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
@@ -32,7 +32,7 @@ namespace Tester
             {
                 string xml = r["wsdata"].ToString();
                 string path = @"WsData\";
-                string fullname = "20220114_" + rowcnt + ".xml";
+                //string fullname = path + "20220114_" + rowcnt + ".xml";
                 File.WriteAllText(fullname, xml);
                 rowcnt++;
             }
