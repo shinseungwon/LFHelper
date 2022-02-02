@@ -44,7 +44,7 @@ barcode:OrderKey 55 20
 'size -> font size
 'style -> 0:normal 1:bold 2:Italic 3:BoldItalic 4:UnderLine 8:StrikeThrough 
 'color -> 0:white else:black
-'x, y -> coords
+'x, y -> coords 
 
 'OrderNo
 text1:{PutawayZone}/14/1/0/170/110
