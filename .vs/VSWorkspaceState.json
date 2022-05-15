@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\HelperDotNet",
-    "\\PickslipPrinterV3",
-    "\\Tester",
-    "\\Tester\\Tester"
+    ""
   ],
-  "SelectedNode": "\\PickslipPrinterV3\\Program.cs",
+  "SelectedNode": "\\HelperDotNet.sln",
   "PreviewInSolutionExplorer": false
 }
