@@ -17,7 +17,7 @@ namespace Tester
     {
         static void Main(string[] args)
         {
-            AsynchronousSocketListener.StartListening();            
+            //AsynchronousSocketListener.StartListening();            
 
             ////Connect DB
             //string connectionString = "Data Source=" + "172.22.8.143" + ",1433; Initial Catalog=" + "KRWMS"
@@ -40,6 +40,8 @@ namespace Tester
             //awaiting
             //9되면 찍어주고
             //돌면서 오더에 m_zip 확인
+
+            
         }
 
         // State object for reading client data asynchronously  
