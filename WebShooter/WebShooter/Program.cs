@@ -12,15 +12,14 @@ namespace WebShooter
         //static void Main(string[] args)
         static void Main()
         {
-            string[] args = { "1" };
-            if (args.Length == 1)
+            string[] args = { "1", "0" }; //batchno, (0->not merge / 1->merge)
+            if (args.Length == 2)
             {
                 string header = File.ReadAllText(@"Header" + args[0] + ".txt");
                 string[][] headerLines = Trimming(header);
 
                 if (headerLines.Length > 0)
                 {
-                    string url = headerLines[0][0];
                     string xmlAddr = headerLines[1][0];
                     string body = File.ReadAllText(@"Body" + args[0] + ".txt");
 
@@ -31,6 +30,7 @@ namespace WebShooter
                     string batch = File.ReadAllText(@"Batch" + args[0] + ".txt");
                     string[][] batches = Trimming(batch);
 
+                    StringBuilder merge = new StringBuilder();
                     int bLines = 0;
                     foreach (string[] s in batches)
                     {
@@ -58,13 +58,33 @@ namespace WebShooter
                             if (result.IndexOf("<code>0000</code>") > 0)
                             {
                                 code = "Success";
+                                Console.WriteLine("batch" + bLines + " success - " + result.Length);
                             }
+                            else
+                            {
+                                Console.WriteLine("batch" + bLines + " failed");
+                            }
+
 
                             string bRecordName = batchDir + @"\line" + bLines++ + "_";
                             File.WriteAllText(bRecordName + "req_" + code + "_" + content.Length + ".txt", content);
                             File.WriteAllText(bRecordName + "res_" + code + "_" + result.Length + ".txt", result);
-                            File.WriteAllText(bRecordName + "csv.csv", XmlToCsv(result, xmlAddr), Encoding.UTF8);
+
+                            //merge csv or not
+                            if (args[1] == "1")
+                            {
+                                merge.Append(XmlToCsv(result, xmlAddr, merge.Length == 0));
+                            }
+                            else
+                            {
+                                File.WriteAllText(bRecordName + "csv.csv", XmlToCsv(result, xmlAddr), Encoding.UTF8);
+                            }
                         }
+                    }
+
+                    if (args[1] == "1")
+                    {
+                        File.WriteAllText(batchDir + @"\mergeBatch_csv.csv", merge.ToString(), Encoding.UTF8);
                     }
                 }
             }
@@ -74,7 +94,7 @@ namespace WebShooter
             }
         }
 
-        static string XmlToCsv(string s, string addr)
+        static string XmlToCsv(string s, string addr, bool header = true)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(s);
@@ -83,7 +103,7 @@ namespace WebShooter
 
             foreach (XmlNode n in rows)
             {
-                if (sb.Length == 0)
+                if (sb.Length == 0 && header)
                 {
                     foreach (XmlNode nn in n.ChildNodes)
                     {
