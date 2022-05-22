@@ -3,8 +3,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace SSMSHelper2
@@ -46,10 +44,7 @@ namespace SSMSHelper2
 
             HookEvents.EnableHook();
             HookEvents.Mc = new MouseEventCallBack(MCallback);
-            HookEvents.Kc = new KeyEventCallBack(KCallback);
-
-            IntPtr h = p.MainWindowHandle;
-            SetForegroundWindow(h);
+            HookEvents.Kc = new KeyEventCallBack(KCallback);            
         }
 
         private static void KCallback(IntPtr code, int key)
@@ -80,7 +75,7 @@ namespace SSMSHelper2
                 return Buff.ToString();
             }
 
-            return null;
+            return "";
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
