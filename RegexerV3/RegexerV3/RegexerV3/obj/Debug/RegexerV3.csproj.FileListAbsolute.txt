@@ -1,7 +1,0 @@
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\bin\Debug\RegexerV3.exe.config
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\bin\Debug\RegexerV3.exe
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\bin\Debug\RegexerV3.pdb
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\obj\Debug\RegexerV3.csproj.AssemblyReference.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\obj\Debug\RegexerV3.csproj.CoreCompileInputs.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\obj\Debug\RegexerV3.exe
-C:\Users\JeffreyShin\source\repos\LFHelper\RegexerV3\RegexerV3\RegexerV3\obj\Debug\RegexerV3.pdb
