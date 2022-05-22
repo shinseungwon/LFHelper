@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,9 +14,6 @@ namespace SSMSHelper2
 
     public partial class Form1 : Form
     {
-        [DllImport("User32.dll")]
-        static extern int SetForegroundWindow(IntPtr point);
-
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool AllocConsole();
@@ -25,43 +24,92 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        static Process p;
+        static Process TargetApp;
+
+        static string[] opsStr = new string[10];
 
         public Form1()
         {
             InitializeComponent();
             AllocConsole();
 
-            p = Process.GetProcessesByName("NotePad++").FirstOrDefault();
-            if (p != null)
+            TargetApp = Process.GetProcessesByName("SSMS").FirstOrDefault();
+            if (TargetApp != null)
             {
-                Console.WriteLine("Ready");
+                Console.WriteLine("Target App is Running - " + TargetApp.Id);
             }
             else
             {
-                Console.WriteLine("Not Ready");
+                Console.WriteLine("Target App is not Running\nPlease Restart App after Run Target App");
             }
 
             HookEvents.EnableHook();
             HookEvents.Mc = new MouseEventCallBack(MCallback);
-            HookEvents.Kc = new KeyEventCallBack(KCallback);            
+            HookEvents.Kc = new KeyEventCallBack(KCallback);
+            SetCommand();
         }
 
         private static void KCallback(IntPtr code, int key)
         {
-            if (GetActiveWindowTitle().IndexOf("Notepad++") > 0
+            if (GetActiveWindowTitle() == TargetApp.MainWindowTitle
                 && HookEvents.keyPressing[162] == 1)
             {
-                Console.WriteLine("key : " + key);
+                string keyStr = "" + (char)key;
+                if (int.TryParse(keyStr, out int x))
+                {
+                    Console.WriteLine("key : " + keyStr);
+                    string command = opsStr[x];
+                    if (command != null)
+                    {
+                        string[] commands = command.Split('\n');
+                        if (commands.Length == 3)
+                        {
+                            string original = Clipboard.GetText();
+                            string res = commands[0].Trim() + Environment.NewLine;
+                            int i, j;
+
+                            string[][] sa = Trimming(original);
+
+                            for (i = 0; i < sa.Length; i++)
+                            {
+                                string regex = commands[1].Trim();
+                                List<string> tl = new List<string>();
+
+                                for (j = 0; j < sa[i].Length; j++)
+                                {
+                                    if (sa[i][j].Length > 0)
+                                    {
+                                        tl.Add(sa[i][j].Trim());
+                                    }
+                                }
+
+                                for (j = 0; j < tl.Count; j++)
+                                {
+                                    regex = regex.Replace("{" + j + "}", tl[j]);
+                                }
+
+                                res += regex + Environment.NewLine;
+
+                            }
+                            res += commands[2].Trim() + Environment.NewLine;
+
+                            Clipboard.SetText(res);
+                            SendKeys.Send("^{v}");
+                            Clipboard.SetText(original);
+                            Console.WriteLine(sa.Length + "Lines");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Wrong Command");
+                        }
+                    }
+                }
             }
         }
 
         private static void MCallback(IntPtr code, int x, int y)
         {
-            if (GetActiveWindowTitle().IndexOf("Notepad++") > 0)
-            {
-                Console.WriteLine("mouse : " + code + " - " + x + "," + y);
-            }
+
         }
 
         private static string GetActiveWindowTitle()
@@ -78,14 +126,52 @@ namespace SSMSHelper2
             return "";
         }
 
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
+        private static string[][] Trimming(string str)
         {
-            HookEvents.DisableHook();
+            string[] lines = str.Replace("\r", "").Split('\n');
+            List<string[]> tmp = new List<string[]>();
+            foreach (string s in lines)
+            {
+                if (s.Length > 0)
+                {
+                    string[] items = s.Split(' ');
+                    List<string> stacks = new List<string>();
+                    foreach (string ss in items)
+                    {
+                        if (ss.Length > 0)
+                        {
+                            stacks.Add(Trim(ss));
+                        }
+                    }
+                    tmp.Add(stacks.ToArray());
+                }
+            }
+
+            return tmp.ToArray();
         }
 
-        private void btn_about_Click(object sender, EventArgs e)
+        private static string Trim(string s)
         {
-            MessageBox.Show("Email : ssw900528@gmail.com" + Environment.NewLine + "GitHub Source : shinseungwon/D3HelperX", "About");
+            return s.Replace("\r", "")
+                .Replace("\n", "")
+                .Replace("\t", "")
+                .Replace(" ", "");
+        }
+
+        private static void SetCommand()
+        {
+            foreach (string fs in Directory.GetFiles(Directory.GetCurrentDirectory()))
+            {
+                if (fs.EndsWith(".txt"))
+                {
+                    string target = Path.GetFileName(fs).Substring(0, 1);
+                    if (int.TryParse(target, out int i) && opsStr[i] == null)
+                    {
+                        Console.WriteLine(i + " : " + Path.GetFileName(fs));
+                        opsStr[i] = File.ReadAllText(fs);
+                    }
+                }
+            }
         }
     }
 
@@ -103,13 +189,6 @@ namespace SSMSHelper2
 
         [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern IntPtr GetModuleHandle(string lpModuleName);
-
-        [StructLayout(LayoutKind.Sequential)]
-        public class Point
-        {
-            public int x;
-            public int y;
-        }
 
         private const int WH_MOUSE_LL = 14;
         private const int WM_LBUTTONDOWN = 0x0201;
