@@ -17,6 +17,33 @@ namespace Tester
     {
         static void Main(string[] args)
         {
+            //If Left(Value, 1) = "1" or Left(Value, 1) = "2" or Left(Value, 1) = "3" 
+            //    or Left(Value, 1) = "4" Then Value = "★" Else Value = "♥" End If
+
+            string name = "이 민";
+            //string name = "신 승원";
+
+            string Value = "";
+
+            if(Value.Length == 2)
+            {
+                Value = name.Substring(0, Value.Length - 1) + "*";
+            }
+            else if (Value.Length >= 3)
+            {
+                Value = name.Substring(0, Value.Length - 1) + "*";
+            }
+            else
+            {
+                Value = name;
+            }
+
+
+            //If Len(Value) = 2 Then Value = Left(Value, Len(Value) - 1) + "*"
+            //Else If Len(Value) >= 3 Then Left(Value, Len(Value - 2) + "*" + Right(Value, 1)
+            //End If
+            
+
             //AsynchronousSocketListener.StartListening();            
 
             ////Connect DB
@@ -41,7 +68,7 @@ namespace Tester
             //9되면 찍어주고
             //돌면서 오더에 m_zip 확인
 
-            
+
         }
 
         // State object for reading client data asynchronously  
