@@ -1,3 +1,0 @@
---
-insert into @tbl (val) values ('a{0}')
---
