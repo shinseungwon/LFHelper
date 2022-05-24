@@ -129,8 +129,17 @@ namespace SSMSHelper2
         private static string[][] Trimming(string str)
         {
             string[] lines = str.Replace("\r", "").Split('\n');
+            List<string> lineList = new List<string>();
+            foreach(string s in lines)
+            {
+                if (!lineList.Contains(s))
+                {
+                    lineList.Add(s);
+                }
+            }
+
             List<string[]> tmp = new List<string[]>();
-            foreach (string s in lines)
+            foreach (string s in lineList)
             {
                 if (s.Length > 0)
                 {
