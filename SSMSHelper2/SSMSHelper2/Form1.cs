@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 
 namespace SSMSHelper2
 {
-    public delegate void MouseEventCallBack(IntPtr code, int x, int y);
-    public delegate void KeyEventCallBack(IntPtr code, int key);
+    public delegate int MouseEventCallBack(IntPtr code, int x, int y);
+    public delegate int KeyEventCallBack(IntPtr code, int key);
 
     public partial class Form1 : Form
     {
@@ -38,7 +36,7 @@ namespace SSMSHelper2
             SetCommand();
         }
 
-        private static void KCallback(IntPtr code, int key)
+        private static int KCallback(IntPtr code, int key)
         {
             if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
                 && HookEvents.keyPressing[162] == 1 && key >= 48 && key <= 57)
@@ -85,13 +83,16 @@ namespace SSMSHelper2
                             SendKeys.Send("{v}");
                             Clipboard.SetText(original);
                         }
-                        else if (commands.Length == 1)
+                        else if (commands.Length == 1 || commands.Length == 2)
                         {
                             string original = Clipboard.GetText();
                             Clipboard.SetText(commands[0]);
                             SendKeys.Send("{v}");
                             Clipboard.SetText(original);
-
+                            if(commands.Length == 2)
+                            {
+                                return -1;
+                            }
                         }
                         else
                         {
@@ -100,11 +101,13 @@ namespace SSMSHelper2
                     }
                 }
             }
+
+            return 0;
         }
 
-        private static void MCallback(IntPtr code, int x, int y)
+        private static int MCallback(IntPtr code, int x, int y)
         {
-
+            return 0;
         }
 
         private static string GetActiveWindowTitle()
@@ -256,7 +259,12 @@ namespace SSMSHelper2
                     {
                         Console.WriteLine("DOWN : " + keyCode);
                         keyPressing[keyCode] = 1;
-                        Kc(wParam, keyCode);
+                        int res = Kc(wParam, keyCode);
+
+                        if(res == -1)
+                        {
+                            return (IntPtr)(-1);
+                        }
                     }
                 }
 
