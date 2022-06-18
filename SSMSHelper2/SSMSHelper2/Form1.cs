@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace SSMSHelper2
@@ -24,40 +25,27 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
-        static Process TargetApp;
-
-        static string[] opsStr = new string[10];
+        static readonly string[] opsStr = new string[10];
 
         public Form1()
         {
             InitializeComponent();
             AllocConsole();
 
-            TargetApp = Process.GetProcessesByName("SSMS").FirstOrDefault();
-            if (TargetApp != null)
-            {
-                Console.WriteLine("Target App is Running - " + TargetApp.Id);
-            }
-            else
-            {
-                Console.WriteLine("Target App is not Running\nPlease Restart App after Run Target App");
-            }
-
             HookEvents.EnableHook();
-            HookEvents.Mc = new MouseEventCallBack(MCallback);
+            //HookEvents.Mc = new MouseEventCallBack(MCallback);
             HookEvents.Kc = new KeyEventCallBack(KCallback);
             SetCommand();
         }
 
         private static void KCallback(IntPtr code, int key)
         {
-            if (GetActiveWindowTitle() == TargetApp.MainWindowTitle
-                && HookEvents.keyPressing[162] == 1)
+            if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
+                && HookEvents.keyPressing[162] == 1 && key >= 48 && key <= 57)
             {
                 string keyStr = "" + (char)key;
                 if (int.TryParse(keyStr, out int x))
                 {
-                    Console.WriteLine("key : " + keyStr);
                     string command = opsStr[x];
                     if (command != null)
                     {
@@ -65,7 +53,7 @@ namespace SSMSHelper2
                         if (commands.Length == 3)
                         {
                             string original = Clipboard.GetText();
-                            string res = commands[0].Trim() + Environment.NewLine;
+                            string res = Trim(commands[0]) == "'" ? "" : commands[0].Trim() + Environment.NewLine;
                             int i, j;
 
                             string[][] sa = Trimming(original);
@@ -91,12 +79,19 @@ namespace SSMSHelper2
                                 res += regex + Environment.NewLine;
 
                             }
-                            res += commands[2].Trim() + Environment.NewLine;
+                            res += Trim(commands[2]) == "'" ? "" : commands[2].Trim() + Environment.NewLine;
 
                             Clipboard.SetText(res);
-                            SendKeys.Send("^{v}");
+                            SendKeys.Send("{v}");
                             Clipboard.SetText(original);
-                            Console.WriteLine(sa.Length + "Lines");
+                        }
+                        else if (commands.Length == 1)
+                        {
+                            string original = Clipboard.GetText();
+                            Clipboard.SetText(commands[0]);
+                            SendKeys.Send("{v}");
+                            Clipboard.SetText(original);
+
                         }
                         else
                         {
@@ -130,7 +125,7 @@ namespace SSMSHelper2
         {
             string[] lines = str.Replace("\r", "").Split('\n');
             List<string> lineList = new List<string>();
-            foreach(string s in lines)
+            foreach (string s in lines)
             {
                 if (!lineList.Contains(s))
                 {
@@ -254,46 +249,52 @@ namespace SSMSHelper2
             if (nCode >= 0)
             {
                 int keyCode = Marshal.ReadInt32(lParam);
+
                 if (wParam == (IntPtr)WM_KEYDOWN)
                 {
-                    keyPressing[keyCode] = 1;
+                    if (keyPressing[keyCode] == 0)
+                    {
+                        Console.WriteLine("DOWN : " + keyCode);
+                        keyPressing[keyCode] = 1;
+                        Kc(wParam, keyCode);
+                    }
                 }
 
                 if (wParam == (IntPtr)WM_KEYUP)
                 {
+                    Console.WriteLine("UP : " + keyCode);
                     keyPressing[keyCode] = 0;
-                    Kc(wParam, keyCode);
                 }
 
-                if (wParam == (IntPtr)WM_LBUTTONDOWN)
-                {
-                    mouseLPressing = 1;
-                }
-                if (wParam == (IntPtr)WM_LBUTTONUP)
-                {
-                    mouseLPressing = 0;
-                    Mc((IntPtr)0, 0, 0);
-                }
+                //if (wParam == (IntPtr)WM_LBUTTONDOWN)
+                //{
+                //    mouseLPressing = 1;
+                //}
+                //if (wParam == (IntPtr)WM_LBUTTONUP)
+                //{
+                //    mouseLPressing = 0;
+                //    Mc((IntPtr)0, 0, 0);
+                //}
 
-                if (wParam == (IntPtr)WM_RBUTTONDOWN)
-                {
-                    mouseRPressing = 1;
-                }
-                if (wParam == (IntPtr)WM_RBUTTONUP)
-                {
-                    mouseRPressing = 0;
-                    Mc((IntPtr)1, 0, 0);
-                }
+                //if (wParam == (IntPtr)WM_RBUTTONDOWN)
+                //{
+                //    mouseRPressing = 1;
+                //}
+                //if (wParam == (IntPtr)WM_RBUTTONUP)
+                //{
+                //    mouseRPressing = 0;
+                //    Mc((IntPtr)1, 0, 0);
+                //}
 
-                if (wParam == (IntPtr)WM_MBUTTONDOWN)
-                {
-                    mouseMPressing = 1;
-                }
-                if (wParam == (IntPtr)WM_MBUTTONUP)
-                {
-                    mouseMPressing = 0;
-                    Mc((IntPtr)2, 0, 0);
-                }
+                //if (wParam == (IntPtr)WM_MBUTTONDOWN)
+                //{
+                //    mouseMPressing = 1;
+                //}
+                //if (wParam == (IntPtr)WM_MBUTTONUP)
+                //{
+                //    mouseMPressing = 0;
+                //    Mc((IntPtr)2, 0, 0);
+                //}
             }
 
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
