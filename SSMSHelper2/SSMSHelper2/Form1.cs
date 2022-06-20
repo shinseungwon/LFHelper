@@ -38,7 +38,8 @@ namespace SSMSHelper2
 
         private static int KCallback(IntPtr code, int key)
         {
-            if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
+            if ((GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio") 
+                || GetActiveWindowTitle().Contains("SQLQuery"))
                 && HookEvents.keyPressing[162] == 1 && key >= 48 && key <= 57)
             {
                 string keyStr = "" + (char)key;
@@ -51,7 +52,7 @@ namespace SSMSHelper2
                         if (commands.Length == 3)
                         {
                             string original = Clipboard.GetText();
-                            string res = Trim(commands[0]) == "'" ? "" : commands[0].Trim() + Environment.NewLine;
+                            string res = commands[0].Trim() == "'" ? "" : commands[0].Trim() + Environment.NewLine;
                             int i, j;
 
                             string[][] sa = Trimming(original);
@@ -77,7 +78,7 @@ namespace SSMSHelper2
                                 res += regex + Environment.NewLine;
 
                             }
-                            res += Trim(commands[2]) == "'" ? "" : commands[2].Trim() + Environment.NewLine;
+                            res += commands[2].Trim() == "'" ? "" : commands[2].Trim() + Environment.NewLine;
 
                             Clipboard.SetText(res);
                             SendKeys.Send("{v}");
@@ -86,7 +87,7 @@ namespace SSMSHelper2
                         else if (commands.Length == 1 || commands.Length == 2)
                         {
                             string original = Clipboard.GetText();
-                            Clipboard.SetText(commands[0]);
+                            Clipboard.SetText(MyTrim(commands[0]));
                             SendKeys.Send("{v}");
                             Clipboard.SetText(original);
                             if(commands.Length == 2)
@@ -147,7 +148,7 @@ namespace SSMSHelper2
                     {
                         if (ss.Length > 0)
                         {
-                            stacks.Add(Trim(ss));
+                            stacks.Add(MyTrim(ss.Trim()));
                         }
                     }
                     tmp.Add(stacks.ToArray());
@@ -157,13 +158,12 @@ namespace SSMSHelper2
             return tmp.ToArray();
         }
 
-        private static string Trim(string s)
+        private static string MyTrim(string s)
         {
             return s.Replace("\r", "")
                 .Replace("\n", "")
-                .Replace("\t", "")
-                .Replace(" ", "");
-        }
+                .Replace("\t", "");                
+        }        
 
         private static void SetCommand()
         {
