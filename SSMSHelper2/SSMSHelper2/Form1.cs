@@ -23,6 +23,9 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
+        [DllImport("user32.dll")]
+        public static extern bool SetKeyboardState(byte[] lpKeyState);
+
         static readonly string[] opsStr = new string[10];
 
         public Form1()
@@ -41,7 +44,7 @@ namespace SSMSHelper2
             try
             {
                 if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
-    || GetActiveWindowTitle().Contains("SQLQuery"))
+                    || GetActiveWindowTitle().Contains("SQLQuery"))
                 {
 
                     Console.WriteLine("Callback Key : " + key);
@@ -89,7 +92,7 @@ namespace SSMSHelper2
                     {
                         if (HookEvents.keyPressing[162] == 1)
                         {
-                            SendKeys.Send("{PAGE UP}");
+                            SendKeys.Send("{PAGE UP}");                            
                         }
                         else
                         {
@@ -101,7 +104,7 @@ namespace SSMSHelper2
                     if (key == 123) //d
                     {
                         if (HookEvents.keyPressing[162] == 1)
-                        {
+                        {                            
                             SendKeys.Send("{PAGE DOWN}");
                         }
                         else
@@ -190,7 +193,7 @@ namespace SSMSHelper2
             }
             catch(Exception e)
             {
-                File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss"), e.ToString());
+                File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt", e.ToString());
             }
             finally
             {
@@ -348,7 +351,7 @@ namespace SSMSHelper2
 
                 if (wParam == (IntPtr)WM_KEYDOWN)
                 {
-                    if (keyPressing[keyCode] == 0)
+                    //if (keyPressing[keyCode] == 0) //not allow pressing
                     {
                         Console.WriteLine("DOWN : " + keyCode);
                         keyPressing[keyCode] = 1;
