@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Principal;
 
 namespace Tester2
 {
@@ -17,15 +19,22 @@ namespace Tester2
         }
         static void Main(string[] args)
         {
+
+            string s1 = "Persist Security Info=False;Integrated Security=true; Initial Catalog = AdventureWorks; Server = MSSQL1";
+            string s2 = "Persist Security Info=False;Integrated Security=SSPI; database = AdventureWorks; server = (local)";
+            string s3 = "Persist Security Info=False;Trusted_Connection=True; database = AdventureWorks; server = (local)";
             //AsynchronousClient.StartClient();
-            int i = 0;
-            while (true)
-            {
-                Thread t = new Thread(new ThreadStart(innerThread));
-                t.Start();
-                Thread.Sleep(1000);
-                Console.WriteLine(i++);
-            }
+            //int i = 0;
+            //while (true)
+            //{
+            //    Thread t = new Thread(new ThreadStart(innerThread));
+            //    t.Start();
+            //    Thread.Sleep(1000);
+            //    Console.WriteLine(i++);
+            //}
+
+            //(...) use the connection at your will.
+            //Even after the impersonation context ended, the connection remains usable.
         }
 
         public class StateObject

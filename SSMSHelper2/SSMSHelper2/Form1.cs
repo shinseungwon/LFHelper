@@ -38,103 +38,164 @@ namespace SSMSHelper2
 
         private static int KCallback(IntPtr code, int key)
         {
-            if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
-                || GetActiveWindowTitle().Contains("SQLQuery")){
-
-                Console.WriteLine("Callback Key : " + key);
-
-                if (key == 114)
+            try
+            {
+                if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
+    || GetActiveWindowTitle().Contains("SQLQuery"))
                 {
-                    SendKeys.Send("{END}");
-                    SendKeys.Send("+{HOME}");
-                    return -1;
-                }
 
-                if (key == 115)
-                {
-                    SendKeys.Send("{END}");
-                    SendKeys.Send("+{HOME}");
-                    SendKeys.Send("{F5}");
-                    return -1;
-                }
+                    Console.WriteLine("Callback Key : " + key);
 
-                if (HookEvents.keyPressing[162] == 1 && key >= 48 && key <= 57)
-                {
-                    string keyStr = "" + (char)key;
-                    if (int.TryParse(keyStr, out int x))
+                    if (key == 114)
                     {
-                        string command = opsStr[x];
-                        if (command != null)
+                        SendKeys.Send("{END}");
+                        SendKeys.Send("+{HOME}");
+                        return -1;
+                    }
+
+                    if (key == 115)
+                    {
+                        SendKeys.Send("{END}");
+                        SendKeys.Send("+{HOME}");
+                        SendKeys.Send("{F5}");
+                        return -1;
+                    }
+
+                    if (HookEvents.keyPressing[162] == 1 && key == 189) //l
+                    {
+                        SendKeys.Send("{LEFT}");
+                        return -1;
+                    }
+
+                    if (HookEvents.keyPressing[162] == 1 && key == 187) //r
+                    {
+                        SendKeys.Send("{RIGHT}");
+                        return -1;
+                    }
+
+                    if (key == 120) //l
+                    {
+                        SendKeys.Send("{LEFT}");
+                        return -1;
+                    }
+
+                    if (key == 121) //r
+                    {
+                        SendKeys.Send("{RIGHT}");
+                        return -1;
+                    }
+
+                    if (key == 122) //u
+                    {
+                        if (HookEvents.keyPressing[162] == 1)
                         {
-                            string[] commands = command.Split('\n');
-                            if (commands.Length == 3)
+                            SendKeys.Send("{PAGE UP}");
+                        }
+                        else
+                        {
+                            SendKeys.Send("{UP}");
+                        }
+                        return -1;
+                    }
+
+                    if (key == 123) //d
+                    {
+                        if (HookEvents.keyPressing[162] == 1)
+                        {
+                            SendKeys.Send("{PAGE DOWN}");
+                        }
+                        else
+                        {
+                            SendKeys.Send("{DOWN}");
+                        }
+                        return -1;
+                    }
+
+                    if (HookEvents.keyPressing[162] == 1 && key >= 48 && key <= 57)
+                    {
+                        string keyStr = "" + (char)key;
+                        if (int.TryParse(keyStr, out int x))
+                        {
+                            string command = opsStr[x];
+                            if (command != null)
                             {
-                                string original = Clipboard.GetText();
-                                string res = commands[0].Trim() == "'" ? "" : commands[0].Trim() + Environment.NewLine;
-                                int i, j;
-
-                                string[][] sa = Trimming(original);
-
-                                for (i = 0; i < sa.Length; i++)
+                                string[] commands = command.Split('\n');
+                                if (commands.Length == 3)
                                 {
-                                    string regex = commands[1].Trim();
-                                    List<string> tl = new List<string>();
+                                    string original = Clipboard.GetText();
+                                    string res = commands[0].Trim() == "'" ? "" : commands[0].Trim() + Environment.NewLine;
+                                    int i, j;
 
-                                    for (j = 0; j < sa[i].Length; j++)
+                                    string[][] sa = Trimming(original);
+
+                                    for (i = 0; i < sa.Length; i++)
                                     {
-                                        if (sa[i][j].Length > 0)
+                                        string regex = commands[1].Trim();
+                                        List<string> tl = new List<string>();
+
+                                        for (j = 0; j < sa[i].Length; j++)
                                         {
-                                            tl.Add(sa[i][j].Trim());
+                                            if (sa[i][j].Length > 0)
+                                            {
+                                                tl.Add(sa[i][j].Trim());
+                                            }
                                         }
+
+                                        for (j = 0; j < tl.Count; j++)
+                                        {
+                                            regex = regex.Replace("{" + j + "}", tl[j]);
+                                        }
+
+                                        res += regex + Environment.NewLine;
+
                                     }
+                                    res += commands[2].Trim() == "'" ? "" : commands[2].Trim() + Environment.NewLine;
 
-                                    for (j = 0; j < tl.Count; j++)
-                                    {
-                                        regex = regex.Replace("{" + j + "}", tl[j]);
-                                    }
-
-                                    res += regex + Environment.NewLine;
-
+                                    Clipboard.SetText(res);
+                                    SendKeys.Send("{v}");
+                                    Clipboard.SetText(original);
                                 }
-                                res += commands[2].Trim() == "'" ? "" : commands[2].Trim() + Environment.NewLine;
-
-                                Clipboard.SetText(res);
-                                SendKeys.Send("{v}");
-                                Clipboard.SetText(original);
-                            }
-                            else if (commands.Length == 1 || commands.Length == 2)
-                            {
-                                string original = Clipboard.GetText();
-                                Clipboard.SetText(MyTrim(commands[0]));
-                                SendKeys.Send("{v}");
-                                Clipboard.SetText(original);
-                                if (commands.Length == 2)
+                                else if (commands.Length == 1 || commands.Length == 2)
                                 {
-                                    return -1;
+                                    string original = Clipboard.GetText();
+                                    Clipboard.SetText(MyTrim(commands[0]));
+                                    SendKeys.Send("{v}");
+                                    Clipboard.SetText(original);
+                                    if (commands.Length == 2)
+                                    {
+                                        return -1;
+                                    }
                                 }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Wrong Command");
+                                else
+                                {
+                                    Console.WriteLine("Wrong Command");
+                                }
                             }
                         }
                     }
                 }
-            }
-            else
-            {
-                if(HookEvents.keyPressing[160] == 0 
-                    && HookEvents.keyPressing[162] == 0 
-                    && key == 19)
+                else
                 {
-                    string original = Clipboard.GetText();
-                    Clipboard.SetText(MyTrim("sungwon@5300"));
-                    SendKeys.Send("^{v}");
-                    Clipboard.SetText(original);
-                    return -1;
+                    if (HookEvents.keyPressing[160] == 0
+                        && HookEvents.keyPressing[162] == 0
+                        && key == 19)
+                    {
+                        string original = Clipboard.GetText();
+                        Clipboard.SetText(MyTrim("sungwon@5300"));
+                        SendKeys.Send("^{v}");
+                        Clipboard.SetText(original);
+                        return -1;
+                    }
                 }
             }
-
+            catch(Exception e)
+            {
+                File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss"), e.ToString());
+            }
+            finally
+            {
+                
+            }
             return 0;
         }
 

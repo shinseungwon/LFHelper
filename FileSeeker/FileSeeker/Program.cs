@@ -60,9 +60,8 @@ namespace FileSeeker
                             if (zae.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
                                 || zae.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                             {
-                                if (zae.Name.Contains(th))
+                                if (!File.Exists(dir + @"\" + zae.Name) && zae.Name.Contains(th))
                                 {
-                                    bool like = false;
                                     using (Stream s = zae.Open())
                                     {
                                         using (StreamReader sr = new StreamReader(s))
@@ -70,16 +69,12 @@ namespace FileSeeker
                                             string content = sr.ReadToEnd();
                                             if (content.Contains(ch))
                                             {
-                                                like = true;
+                                                zae.ExtractToFile(dir + @"\" + zae.Name);
+                                                Console.WriteLine("\n----------------------------------------\n" 
+                                                    + "File Out From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
+                                                    + "\n----------------------------------------\n");
                                             }
                                         }
-                                    }
-
-                                    if (like)
-                                    {
-                                        string outPath = dir + @"\" + zae.Name;
-                                        zae.ExtractToFile(outPath);
-                                        Console.WriteLine("File Out : " + outPath);
                                     }
                                 }
                             }
@@ -88,12 +83,15 @@ namespace FileSeeker
                 }
                 else if (f.Extension == ".txt" || f.Extension == ".csv")
                 {
-                    if (f.Name.Contains(th))
+                    if (!File.Exists(dir + @"\" + f.Name) && f.Name.Contains(th))
                     {
                         string content = File.ReadAllText(f.FullName);
                         if (content.Contains(ch))
                         {
                             File.Copy(f.FullName, dir + @"\" + f.Name);
+                            Console.WriteLine("\n----------------------------------------\n" 
+                                + "File Copied : \n" + dir + @"\" + f.Name + "\n From : \n" + f.FullName
+                                + "\n--------------------------------------------------\n");
                         }
                     }
                 }

@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using HelperDotNet;
+using Microsoft.Office.Interop.Excel;
 
 namespace Tester
 {
@@ -17,32 +18,34 @@ namespace Tester
     {
         static void Main(string[] args)
         {
+            //Console.WriteLine(File.ReadAllText(@"\\172.22.13.33\DTS\ExceedToDTS\hnm05-kr\WMSOSTS\Archive\WMSSHP_I216_LF03_00547746_000_20220524001332263.txt"));
+
             //If Left(Value, 1) = "1" or Left(Value, 1) = "2" or Left(Value, 1) = "3" 
             //    or Left(Value, 1) = "4" Then Value = "★" Else Value = "♥" End If
 
-            string name = "이 민";
-            //string name = "신 승원";
+            //string name = "이 민";
+            ////string name = "신 승원";
 
-            string Value = "";
+            //string Value = "";
 
-            if(Value.Length == 2)
-            {
-                Value = name.Substring(0, Value.Length - 1) + "*";
-            }
-            else if (Value.Length >= 3)
-            {
-                Value = name.Substring(0, Value.Length - 1) + "*";
-            }
-            else
-            {
-                Value = name;
-            }
+            //if(Value.Length == 2)
+            //{
+            //    Value = name.Substring(0, Value.Length - 1) + "*";
+            //}
+            //else if (Value.Length >= 3)
+            //{
+            //    Value = name.Substring(0, Value.Length - 1) + "*";
+            //}
+            //else
+            //{
+            //    Value = name;
+            //}
 
 
             //If Len(Value) = 2 Then Value = Left(Value, Len(Value) - 1) + "*"
             //Else If Len(Value) >= 3 Then Left(Value, Len(Value - 2) + "*" + Right(Value, 1)
             //End If
-            
+
 
             //AsynchronousSocketListener.StartListening();            
 
@@ -53,6 +56,28 @@ namespace Tester
             //DbHelper dh = new DbHelper(connectionString);
             //Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
             //dh.SetLogger(l);
+
+            //Connect DB
+            string connectionString = "Data Source=" + "172.22.17.155" + ",1433; Initial Catalog="
+                + "KRWMS" + "; Integrated Security=SSPI;";
+
+            DbHelper dh = new DbHelper(connectionString);
+            dh.throwError = true;
+            Logger l = new Logger(Directory.GetCurrentDirectory() + @"\Logger");
+            dh.SetLogger(l);
+
+            string query = "select top 100 * from krwms..orders";
+            DataSet ds = new DataSet();
+            dh.CallQuery(query, ref ds);
+
+            foreach (DataRow r in ds.Tables[0].Rows)
+            {
+                foreach (DataColumn c in ds.Tables[0].Columns)
+                {
+                    Console.Write(r[c] + " ");
+                }
+                Console.WriteLine();
+            }
 
             //string query = "select wsdata from krarchive..wsoutbound_log(nolock) where seqno in ( '257018156', '257025373')";
             //DataSet ds = new DataSet();
@@ -67,6 +92,8 @@ namespace Tester
             //awaiting
             //9되면 찍어주고
             //돌면서 오더에 m_zip 확인
+
+            //테스팅
 
 
         }
