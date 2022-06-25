@@ -75,26 +75,40 @@ namespace FileSeekerV2
                 textBox1.Text = "";
                 button1.Text = "STOP";
 
-                if (listView1.SelectedItems.Count == 0)
+                if (textBox3.Text != "")
                 {
-                    foreach (ListViewItem l in listView1.Items)
+                    if (Directory.Exists(textBox3.Text))
                     {
-                        if (Directory.Exists(l.Text))
-                        {
-                            Targets.Add(l.Text);
-                        }
+                        Targets.Add(textBox3.Text);
+                    }
+                    else
+                    {
+                        Print("Invalid target directory");
                     }
                 }
                 else
                 {
-                    foreach (ListViewItem l in listView1.SelectedItems)
+                    if (listView1.SelectedItems.Count == 0)
                     {
-                        if (Directory.Exists(l.Text))
+                        foreach (ListViewItem l in listView1.Items)
                         {
-                            Targets.Add(l.Text);
+                            if (Directory.Exists(l.Text))
+                            {
+                                Targets.Add(l.Text);
+                            }
                         }
                     }
-                }
+                    else
+                    {
+                        foreach (ListViewItem l in listView1.SelectedItems)
+                        {
+                            if (Directory.Exists(l.Text))
+                            {
+                                Targets.Add(l.Text);
+                            }
+                        }
+                    }
+                }                
 
                 Thread thread = new Thread(Search);
                 thread.Start();
@@ -253,6 +267,15 @@ namespace FileSeekerV2
             {
                 control.GetType().InvokeMember(
                     propertyName, BindingFlags.SetProperty, null, control, new object[] { propertyValue });
+            }
+        }
+
+        private void listView1_DoubleClick(object sender, EventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            if (lv.SelectedItems.Count == 1)
+            {
+                textBox4.Text = lv.SelectedItems[0].Text;
             }
         }
     }
