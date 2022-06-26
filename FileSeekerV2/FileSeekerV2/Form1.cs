@@ -108,7 +108,7 @@ namespace FileSeekerV2
                             }
                         }
                     }
-                }                
+                }
 
                 Thread thread = new Thread(Search);
                 thread.Start();
@@ -277,6 +277,11 @@ namespace FileSeekerV2
             {
                 textBox4.Text = lv.SelectedItems[0].Text;
             }
+        }
+
+        private void checkBox3_CheckedChanged(object sender, EventArgs e)
+        {
+            TopMost = checkBox3.Checked;
         }
     }
 }
