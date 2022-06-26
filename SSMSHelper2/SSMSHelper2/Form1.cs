@@ -26,7 +26,10 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         public static extern bool SetKeyboardState(byte[] lpKeyState);
 
-        static readonly string[] opsStr = new string[10];
+        private static readonly string[] opsStr = new string[10];
+
+        private static readonly List<string> include = new List<string>();
+        private static readonly List<string> exclude = new List<string>();
 
         public Form1()
         {
@@ -37,16 +40,56 @@ namespace SSMSHelper2
             //HookEvents.Mc = new MouseEventCallBack(MCallback);
             HookEvents.Kc = new KeyEventCallBack(KCallback);
             SetCommand();
+
+            checkBox1.Checked = true;
+
+            //Environment.NewLine cr + lf (13 + 10)
+
+            if (File.Exists("preset.txt"))
+            {
+                string presetStr = File.ReadAllText("preset.txt");
+                string[] preset = presetStr.Replace("\r", "").Split('\n');
+                foreach (string s in preset)
+                {
+                    if (s.StartsWith("+"))
+                    {
+                        include.Add(s);
+                        textBox1.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
+                    }
+                    else if (s.StartsWith("-"))
+                    {
+                        exclude.Add(s);
+                        textBox2.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
+                    }
+                }
+            }
         }
 
         private static int KCallback(IntPtr code, int key)
         {
             try
             {
-                if (GetActiveWindowTitle().Contains("Microsoft SQL Server Management Studio")
-                    || GetActiveWindowTitle().Contains("SQLQuery"))
+                bool inc = false, exc = true;
+                string awt = GetActiveWindowTitle();
+                foreach (string s in include)
                 {
+                    if (s.Length > 0 && awt.Contains(s))
+                    {
+                        inc = true;
+                        break;
+                    }
+                }
+                foreach (string s in exclude)
+                {
+                    if (s.Length > 0 && awt.Contains(s))
+                    {
+                        exc = false;
+                        break;
+                    }
+                }
 
+                if (inc && exc)
+                {
                     Console.WriteLine("Callback Key : " + key);
 
                     if (key == 114)
@@ -92,7 +135,7 @@ namespace SSMSHelper2
                     {
                         if (HookEvents.keyPressing[162] == 1)
                         {
-                            SendKeys.Send("{PAGE UP}");                            
+                            SendKeys.Send("{PAGE UP}");
                         }
                         else
                         {
@@ -104,7 +147,7 @@ namespace SSMSHelper2
                     if (key == 123) //d
                     {
                         if (HookEvents.keyPressing[162] == 1)
-                        {                            
+                        {
                             SendKeys.Send("{PAGE DOWN}");
                         }
                         else
@@ -191,13 +234,13 @@ namespace SSMSHelper2
                     }
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt", e.ToString());
             }
             finally
             {
-                
+
             }
             return 0;
         }
@@ -275,6 +318,26 @@ namespace SSMSHelper2
                     }
                 }
             }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                TopMost = true;
+            }
+            else
+            {
+                TopMost = false;
+            }
+        }
+
+        private void textBoxesChanged(object sender, EventArgs e)
+        {
+            include.Clear();
+            exclude.Clear();
+            include.AddRange(textBox1.Text.Replace("\r", "").Split('\n'));
+            exclude.AddRange(textBox2.Text.Replace("\r", "").Split('\n'));
         }
     }
 
