@@ -166,6 +166,7 @@ namespace FileSeekerV2
 
         private void CheckDir(DirectoryInfo d, string dir, string th, string ch)
         {
+            Console.WriteLine("CheckDir : " + dir);
             if (Stop)
             {
                 return;
@@ -175,6 +176,23 @@ namespace FileSeekerV2
             {
                 if (f.Extension == ".zip" && checkBox1.Checked)
                 {
+                    string thZip = "", thFile = "";
+                    if (th.Contains("/"))
+                    {
+                        string[] thSplit = th.Split('/');
+                        thZip = thSplit[0];
+                        thFile = thSplit[1];
+                    }
+                    else
+                    {
+                        thFile = th;
+                    }
+
+                    if (thZip != "" && !f.Name.Contains(thZip))
+                    {
+                        continue;
+                    }
+
                     using (ZipArchive za = ZipFile.OpenRead(f.FullName))
                     {
                         foreach (ZipArchiveEntry zae in za.Entries)
@@ -183,7 +201,8 @@ namespace FileSeekerV2
                                 || zae.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                             {
                                 //if (!File.Exists(dir + @"\" + zae.Name) && zae.Name.Contains(th))
-                                if (zae.Name.Contains(th))
+
+                                if (zae.Name.Contains(thFile))
                                 {
                                     using (Stream s = zae.Open())
                                     {
