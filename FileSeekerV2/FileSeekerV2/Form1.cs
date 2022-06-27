@@ -75,11 +75,11 @@ namespace FileSeekerV2
                 textBox1.Text = "";
                 button1.Text = "STOP";
 
-                if (textBox3.Text != "")
+                if (textBox4.Text != "")
                 {
-                    if (Directory.Exists(textBox3.Text))
+                    if (Directory.Exists(textBox4.Text))
                     {
-                        Targets.Add(textBox3.Text);
+                        Targets.Add(textBox4.Text);
                     }
                     else
                     {
