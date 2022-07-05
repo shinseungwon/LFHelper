@@ -31,6 +31,8 @@ namespace SSMSHelper2
         private static readonly List<string> include = new List<string>();
         private static readonly List<string> exclude = new List<string>();
 
+        private static readonly List<MyCommand> commands = new List<MyCommand>();
+
         public Form1()
         {
             InitializeComponent();
@@ -44,6 +46,17 @@ namespace SSMSHelper2
             checkBox1.Checked = true;
 
             //Environment.NewLine cr + lf (13 + 10)
+
+            DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory());
+            FileInfo[] files = di.GetFiles();
+            foreach (FileInfo fi in files)
+            {
+                if (fi.Name.StartsWith("!"))
+                {
+                    //Console.WriteLine(fi.FullName);
+                    commands.Add(new MyCommand(File.ReadAllText(fi.FullName)));
+                }
+            }
 
             if (File.Exists("preset.txt"))
             {
@@ -69,6 +82,20 @@ namespace SSMSHelper2
         {
             try
             {
+                Console.WriteLine(key);
+                //New Object Model Test
+                foreach (MyCommand myCommand in commands)
+                {
+                    myCommand.Execute(key
+                        , HookEvents.keyPressing[160] == 1 //shift
+                        , HookEvents.keyPressing[162] == 1 //ctrl
+                        , HookEvents.keyPressing[164] == 1 //alt
+                        );
+                }
+
+                return 0;
+                //~New Object Model Test
+
                 bool inc = false, exc = true;
                 string awt = GetActiveWindowTitle();
                 foreach (string s in include)
@@ -338,6 +365,83 @@ namespace SSMSHelper2
             exclude.Clear();
             include.AddRange(textBox1.Text.Replace("\r", "").Split('\n'));
             exclude.AddRange(textBox2.Text.Replace("\r", "").Split('\n'));
+        }
+    }
+
+    public class MyCommand
+    {
+        public string fileText = "";
+
+        public readonly List<string> includes = new List<string>();
+        public readonly List<string> excludes = new List<string>();
+
+        public readonly List<MyCommandItem> items = new List<MyCommandItem>();
+
+        public MyCommand(string fileText)
+        {
+            this.fileText = fileText;
+
+            string[] itemstrings = fileText.Split('@');
+
+            int i;
+            string[] cludes = itemstrings[0].Replace("\r", "")
+                .Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string s in cludes)
+            {
+                if (s.StartsWith("+"))
+                {
+                    includes.Add(s.Substring(1, s.Length - 1));
+                }
+                else if (s.StartsWith("-"))
+                {
+                    excludes.Add(s.Substring(1, s.Length - 1));
+                }
+            }
+
+            for (i = 1; i < itemstrings.Length; i++)
+            {
+                items.Add(new MyCommandItem(itemstrings[i]));
+            }
+        }
+
+        public int Execute(int key
+            , bool shift = false
+            , bool control = false
+            , bool alt = false)
+        {
+
+            return 0;
+        }
+    }
+
+    public class MyCommandItem
+    {
+        public string itemString = "";
+        public string name = "";
+        public string key = "";
+        public string type = "";
+        public string content = "";
+        public MyCommandItem(string itemString)
+        {
+            this.itemString = itemString;
+            string[] lines = itemString.Replace("\r", "")
+                .Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+
+            int i;
+            name = lines[0];
+            key = lines[1];
+            type = lines[2];
+
+            string content = "";
+            for (i = 3; i < lines.Length; i++)
+            {
+                content += lines[i];
+                if (i != lines.Length - 1)
+                {
+                    content += "\r\n";
+                }
+            }
         }
     }
 
