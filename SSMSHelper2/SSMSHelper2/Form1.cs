@@ -82,7 +82,7 @@ namespace SSMSHelper2
         {
             try
             {
-                Console.WriteLine(key);
+                //Console.WriteLine(key);
                 //New Object Model Test
                 foreach (MyCommand myCommand in commands)
                 {
@@ -413,7 +413,6 @@ namespace SSMSHelper2
 
         public int Execute(int key, string window, bool shift = false, bool control = false)
         {
-            Console.WriteLine("Key : " + key + " - " + shift + " " + control);
             bool inc = false, exc = false;
 
             //code
@@ -484,9 +483,16 @@ namespace SSMSHelper2
 
         public bool Matches(int keyCode, bool shift, bool control)
         {
-            Console.WriteLine("Matches Start : " + keyCode + "/" + shift + "/" + control);
+            Console.WriteLine("Matches Start : " + keyCode + "/"
+                + (char)keyCode + "/" + shift + "/" + control);
 
+            Keys keyObj = (Keys)keyCode;
+            string currentKey = "{" + keyObj.ToString() + "}";
 
+            //Console.WriteLine(currentKey);
+            //SendKeys.Send("+^" + currentKey);
+
+            //매치 되는지만 생각
 
             return false;
         }
@@ -532,7 +538,7 @@ namespace SSMSHelper2
                 }
                 return -1;
             }
-            return 0;
+            return -1;
         }
     }
 
@@ -609,9 +615,9 @@ namespace SSMSHelper2
 
                 if (wParam == (IntPtr)WM_KEYDOWN)
                 {
-                    //if (keyPressing[keyCode] == 0) //not allow pressing
+                    if (keyPressing[keyCode] == 0) //not allow pressing
                     {
-                        Console.WriteLine("DOWN : " + keyCode);
+                        //Console.WriteLine("DOWN : " + keyCode);
                         keyPressing[keyCode] = 1;
                         int res = Kc(wParam, keyCode);
 
@@ -624,7 +630,7 @@ namespace SSMSHelper2
 
                 if (wParam == (IntPtr)WM_KEYUP)
                 {
-                    Console.WriteLine("UP : " + keyCode);
+                    //Console.WriteLine("UP : " + keyCode);
                     keyPressing[keyCode] = 0;
                 }
 
