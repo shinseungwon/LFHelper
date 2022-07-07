@@ -86,11 +86,17 @@ namespace SSMSHelper2
                 //New Object Model Test
                 foreach (MyCommand myCommand in commands)
                 {
-                    myCommand.Execute(key
+                    int res;
+                    //0 -> no action, -1 -> action
+                    res = myCommand.Execute(key
+                        , GetActiveWindowTitle()
                         , HookEvents.keyPressing[160] == 1 //shift
                         , HookEvents.keyPressing[162] == 1 //ctrl
-                        , HookEvents.keyPressing[164] == 1 //alt
                         );
+                    if (res == -1)
+                    {
+                        return -1;
+                    }
                 }
 
                 return 0;
@@ -405,11 +411,43 @@ namespace SSMSHelper2
             }
         }
 
-        public int Execute(int key
-            , bool shift = false
-            , bool control = false
-            , bool alt = false)
+        public int Execute(int key, string window, bool shift = false, bool control = false)
         {
+            Console.WriteLine("Key : " + key + " - " + shift + " " + control);
+            bool inc = false, exc = false;
+
+            //code
+            foreach (string s in includes)
+            {
+                if (window.Contains(s))
+                {
+                    inc = true;
+                    break;
+                }
+            }
+
+            foreach (string s in excludes)
+            {
+                if (window.Contains(s))
+                {
+                    exc = true;
+                    break;
+                }
+            }
+
+            if (inc && !exc)
+            {
+                foreach (MyCommandItem item in items)
+                {
+                    int res;
+                    res = item.Execute(key, shift, control);
+                    if (res == -1)
+                    {
+                        return -1;
+                    }
+                }
+            }
+            //~code
 
             return 0;
         }
@@ -442,6 +480,59 @@ namespace SSMSHelper2
                     content += "\r\n";
                 }
             }
+        }
+
+        public bool Matches(int keyCode, bool shift, bool control)
+        {
+            Console.WriteLine("Matches Start : " + keyCode + "/" + shift + "/" + control);
+
+
+
+            return false;
+        }
+
+        public int Execute(int key, bool shift, bool control)
+        {
+            if (Matches(key, shift, control))
+            {
+                //Run Step
+                if (type[0] == '1')
+                {
+
+                }
+                else if (type[0] == '2')
+                {
+                    if (type[2] == '1')
+                    {
+
+                    }
+                    else if (type[2] == '2')
+                    {
+
+                    }
+                    else if (type[2] == '3')
+                    {
+
+                    }
+                }
+                else if (type[0] == '3')
+                {
+                    if (type[2] == '1')
+                    {
+
+                    }
+                    else if (type[2] == '2')
+                    {
+
+                    }
+                    else if (type[2] == '3')
+                    {
+
+                    }
+                }
+                return -1;
+            }
+            return 0;
         }
     }
 
