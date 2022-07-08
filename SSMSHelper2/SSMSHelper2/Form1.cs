@@ -470,7 +470,6 @@ namespace SSMSHelper2
             key = lines[1];
             type = lines[2];
 
-            string content = "";
             for (i = 3; i < lines.Length; i++)
             {
                 content += lines[i];
@@ -481,45 +480,97 @@ namespace SSMSHelper2
             }
         }
 
-        public bool Matches(int keyCode, bool shift, bool control)
+        public bool Matches(string keyString, bool shift, bool control)
         {
-            Console.WriteLine("Matches Start : " + keyCode + "/"
-                + (char)keyCode + "/" + shift + "/" + control);
-
-            Keys keyObj = (Keys)keyCode;
-            string currentKey = "{" + keyObj.ToString() + "}";
-
-            //Console.WriteLine(currentKey);
-            //SendKeys.Send("+^" + currentKey);
-
-            //매치 되는지만 생각
+            string keySet;
+            if ((key.StartsWith("^+{") || key.StartsWith("+^{")) && shift && control)
+            {
+                keySet = key.Substring(2, key.Length - 2);
+                return keySet == keyString;
+            }
+            else if ((key.StartsWith("^{") && control && !shift)
+                || (key.StartsWith("+{") && !control && shift))
+            {
+                keySet = key.Substring(1, key.Length - 1);
+                return keySet == keyString;
+            }
+            else if (key.StartsWith("{"))
+            {
+                keySet = key;
+                return keySet == keyString;
+            }
+            else if (key.Length == 1)
+            {
+                keySet = "{" + key + "}";
+                return keySet == keyString;
+            }
 
             return false;
         }
 
-        public int Execute(int key, bool shift, bool control)
+        public int Execute(int keyCode, bool shift, bool control)
         {
-            if (Matches(key, shift, control))
+            Keys keyObj = (Keys)keyCode;
+            string keyIn = "{" + keyObj.ToString() + "}";
+
+            if (Matches(keyIn, shift, control))
             {
                 //Run Step
-                if (type[0] == '1')
+                if (type == "1")
                 {
-
+                    Console.WriteLine(keyIn + " in / " + content + " out");
+                    SendKeys.Send(content);
                 }
                 else if (type[0] == '2')
                 {
+                    string original = Clipboard.GetText();
+                    string toWrite = "";
                     if (type[2] == '1')
                     {
-
+                        toWrite = content;
                     }
                     else if (type[2] == '2')
                     {
+                        string[][] items = Trimming(original);
 
+                        int i;
+                        toWrite = content;
+                        for (i = 0; i < items[0].Length; i++)
+                        {
+                            toWrite = toWrite.Replace("{" + i + "}", items[0][i]);
+                        }
                     }
                     else if (type[2] == '3')
                     {
+                        string[] cLines = content.Replace("\r", "")
+                            .Split(new string[] { "\n" }
+                            , StringSplitOptions.RemoveEmptyEntries);
 
+                        if (cLines.Length == 3)
+                        {
+                            StringBuilder sb = new StringBuilder(cLines[0] + "\r\n");
+                            string middle;
+                            string[][] items = Trimming(original);
+
+                            int i, j;
+
+                            for (i = 0; i < items.Length; i++)
+                            {
+                                middle = cLines[1];
+                                for (j = 0; j < items[i].Length; j++)
+                                {
+                                    middle = middle.Replace("{" + j + "}", items[i][j]);
+                                }
+                                sb.Append(middle + "\r\n");
+                            }
+
+                            sb.Append(cLines[2]);
+                            toWrite = sb.ToString();
+                        }
                     }
+                    Clipboard.SetText(toWrite);
+                    SendKeys.Send((control ? "^" : "") + "{v}");
+                    Clipboard.SetText(original);
                 }
                 else if (type[0] == '3')
                 {
@@ -538,7 +589,47 @@ namespace SSMSHelper2
                 }
                 return -1;
             }
-            return -1;
+            return 0;
+        }
+
+        private string[][] Trimming(string str)
+        {
+            string[] lines = str.Replace("\r", "").Split('\n');
+            List<string> lineList = new List<string>();
+            foreach (string s in lines)
+            {
+                if (!lineList.Contains(s))
+                {
+                    lineList.Add(s);
+                }
+            }
+
+            List<string[]> tmp = new List<string[]>();
+            foreach (string s in lineList)
+            {
+                if (s.Length > 0)
+                {
+                    string[] items = s.Split(' ');
+                    List<string> stacks = new List<string>();
+                    foreach (string ss in items)
+                    {
+                        if (ss.Length > 0)
+                        {
+                            stacks.Add(MyTrim(ss.Trim()));
+                        }
+                    }
+                    tmp.Add(stacks.ToArray());
+                }
+            }
+
+            return tmp.ToArray();
+        }
+
+        private string MyTrim(string s)
+        {
+            return s.Replace("\r", "")
+                .Replace("\n", "")
+                .Replace("\t", "");
         }
     }
 
