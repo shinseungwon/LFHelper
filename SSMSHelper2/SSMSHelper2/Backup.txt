@@ -202,3 +202,57 @@
         //        .Replace("\n", "")
         //        .Replace("\t", "");
         //}
+
+                private static void SetCommand()
+        {
+            foreach (string fs in Directory.GetFiles(Directory.GetCurrentDirectory()))
+            {
+                if (fs.EndsWith(".txt"))
+                {
+                    string target = Path.GetFileName(fs).Substring(0, 1);
+                    if (int.TryParse(target, out int i) && opsStr[i] == null)
+                    {
+                        Console.WriteLine(i + " : " + Path.GetFileName(fs));
+                        opsStr[i] = File.ReadAllText(fs);
+                    }
+                }
+            }
+        }
+
+                    //if (File.Exists("preset.txt"))
+            //{
+            //    string presetStr = File.ReadAllText("preset.txt");
+            //    string[] preset = presetStr.Replace("\r", "").Split('\n');
+            //    foreach (string s in preset)
+            //    {
+            //        if (s.StartsWith("+"))
+            //        {
+            //            include.Add(s);
+            //            textBox1.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
+            //        }
+            //        else if (s.StartsWith("-"))
+            //        {
+            //            exclude.Add(s);
+            //            textBox2.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
+            //        }
+            //    }
+            //}
+
+                    private void textBoxesChanged(object sender, EventArgs e)
+        {
+            include.Clear();
+            exclude.Clear();
+            include.AddRange(textBox1.Text.Replace("\r", "").Split('\n'));
+            exclude.AddRange(textBox2.Text.Replace("\r", "").Split('\n'));
+        }
+
+                private static readonly List<string> include = new List<string>();
+        private static readonly List<string> exclude = new List<string>();
+                private static readonly string[] opsStr = new string[10];
+        
+                            //process.StartInfo.UseShellExecute = false;
+                    //process.StartInfo.RedirectStandardOutput = true;
+                    //process.Start();
+
+                    //SendKeys.Send((control ? "" : "^") + "{v}");
+                    //Clipboard.SetText(original ?? "");

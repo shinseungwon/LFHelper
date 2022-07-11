@@ -26,11 +26,6 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         public static extern bool SetKeyboardState(byte[] lpKeyState);
 
-        private static readonly string[] opsStr = new string[10];
-
-        private static readonly List<string> include = new List<string>();
-        private static readonly List<string> exclude = new List<string>();
-
         private static readonly List<MyCommand> commands = new List<MyCommand>();
 
         public Form1()
@@ -41,7 +36,6 @@ namespace SSMSHelper2
             HookEvents.EnableHook();
             //HookEvents.Mc = new MouseEventCallBack(MCallback);
             HookEvents.Kc = new KeyEventCallBack(KCallback);
-            SetCommand();
 
             checkBox1.Checked = true;
 
@@ -57,25 +51,6 @@ namespace SSMSHelper2
                     commands.Add(new MyCommand(File.ReadAllText(fi.FullName)));
                 }
             }
-
-            if (File.Exists("preset.txt"))
-            {
-                string presetStr = File.ReadAllText("preset.txt");
-                string[] preset = presetStr.Replace("\r", "").Split('\n');
-                foreach (string s in preset)
-                {
-                    if (s.StartsWith("+"))
-                    {
-                        include.Add(s);
-                        textBox1.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
-                    }
-                    else if (s.StartsWith("-"))
-                    {
-                        exclude.Add(s);
-                        textBox2.AppendText(s.Substring(1, s.Length - 1) + Environment.NewLine);
-                    }
-                }
-            }
         }
 
         private static int KCallback(IntPtr code, int key)
@@ -87,15 +62,15 @@ namespace SSMSHelper2
                 foreach (MyCommand myCommand in commands)
                 {
                     int res;
-                    //0 -> no action, -1 -> action
+                    //0 -> no action, -1 -> action, 1 -> action and sendkey
                     res = myCommand.Execute(key
                         , GetActiveWindowTitle()
                         , HookEvents.keyPressing[160] == 1 //shift
                         , HookEvents.keyPressing[162] == 1 //ctrl
                         );
-                    if (res == -1)
+                    if (res != 0)
                     {
-                        return -1;
+                        return res;
                     }
                 }
 
@@ -103,7 +78,8 @@ namespace SSMSHelper2
             }
             catch (Exception e)
             {
-                File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt", e.ToString());
+                //File.WriteAllText("ErrorLog" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt", e.ToString());
+                Console.WriteLine(e.ToString());
             }
             finally
             {
@@ -131,22 +107,6 @@ namespace SSMSHelper2
             return "";
         }
 
-        private static void SetCommand()
-        {
-            foreach (string fs in Directory.GetFiles(Directory.GetCurrentDirectory()))
-            {
-                if (fs.EndsWith(".txt"))
-                {
-                    string target = Path.GetFileName(fs).Substring(0, 1);
-                    if (int.TryParse(target, out int i) && opsStr[i] == null)
-                    {
-                        Console.WriteLine(i + " : " + Path.GetFileName(fs));
-                        opsStr[i] = File.ReadAllText(fs);
-                    }
-                }
-            }
-        }
-
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -157,14 +117,6 @@ namespace SSMSHelper2
             {
                 TopMost = false;
             }
-        }
-
-        private void textBoxesChanged(object sender, EventArgs e)
-        {
-            include.Clear();
-            exclude.Clear();
-            include.AddRange(textBox1.Text.Replace("\r", "").Split('\n'));
-            exclude.AddRange(textBox2.Text.Replace("\r", "").Split('\n'));
         }
     }
 
@@ -201,7 +153,10 @@ namespace SSMSHelper2
 
             for (i = 1; i < itemstrings.Length; i++)
             {
-                items.Add(new MyCommandItem(itemstrings[i]));
+                if (!itemstrings[i].StartsWith("!"))
+                {
+                    items.Add(new MyCommandItem(itemstrings[i]));
+                }
             }
         }
 
@@ -234,9 +189,9 @@ namespace SSMSHelper2
                 {
                     int res;
                     res = item.Execute(key, shift, control);
-                    if (res == -1)
+                    if (res != 0)
                     {
-                        return -1;
+                        return res;
                     }
                 }
             }
@@ -325,7 +280,7 @@ namespace SSMSHelper2
                     }
                     else if (type[2] == '2')
                     {
-                        string[][] items = Trimming(original);
+                        string[][] items = MyTrimming(original);
 
                         int i;
                         toWrite = content;
@@ -344,7 +299,7 @@ namespace SSMSHelper2
                         {
                             StringBuilder sb = new StringBuilder(cLines[0] + "\r\n");
                             string middle;
-                            string[][] items = Trimming(original);
+                            string[][] items = MyTrimming(original);
 
                             int i, j;
 
@@ -362,31 +317,99 @@ namespace SSMSHelper2
                             toWrite = sb.ToString();
                         }
                     }
-                    Clipboard.SetText(toWrite);
-                    SendKeys.Send((control ? "^" : "") + "{v}");
-                    Clipboard.SetText(original);
+                    Clipboard.SetText(toWrite ?? "");
+                    SendKeys.Send((control ? "" : "^") + "{v}");
+                    Clipboard.SetText(original ?? "");
                 }
                 else if (type[0] == '3')
                 {
-                    if (type[2] == '1')
+                    string original = Clipboard.GetText();
+                    string[][] items = MyTrimming(original);
+                    int i;
+                    string toWrite = content;
+                    if (items.Length > 0)
                     {
-
+                        for (i = 0; i < items[0].Length; i++)
+                        {
+                            toWrite = toWrite.Replace("{" + i + "}", items[0][i]);
+                        }
                     }
-                    else if (type[2] == '2')
-                    {
 
+                    Process process = new Process();
+
+                    if (type[2] == '1')//cmd with new prompt
+                    {
+                        process.StartInfo.UseShellExecute = true;
+                        process.StartInfo.RedirectStandardOutput = false;
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = content;
+                        process.Start();
                     }
-                    else if (type[2] == '3')
+                    else if (type[2] == '2')//cmd with output
                     {
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = true;
+                        process.StartInfo.FileName = "cmd.exe";
+                        process.StartInfo.Arguments = content;
+                        process.Start();
 
+                        string res = process.StandardOutput.ReadToEnd();
+                        //Console.WriteLine(res);
+
+                        if (type.Length == 5)
+                        {
+                            if (type[4] == '1') //save file and console out filename
+                            {
+                                string fileName = "Output for " + name
+                                    + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+                                File.WriteAllText(fileName, res);
+                                Console.WriteLine(fileName);
+                            }
+                            else if (type[4] == '2') //save file and open file
+                            {
+                                string fileName = "Output for " + name
+                                    + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
+                                File.WriteAllText(fileName, res);
+                                Process.Start("Notepad.exe", fileName);
+                            }
+                            else if (type[4] == '3') //store clipboard
+                            {
+                                Clipboard.SetText(res);
+                            }
+                            else if (type[4] == '4') //paste
+                            {
+                                Clipboard.SetText(res);
+                                SendKeys.Send((control ? "" : "^") + "{v}");
+                                Clipboard.SetText(original ?? "");
+                            }
+                        }
+                    }
+                    else if (type[2] == '3') //open exe
+                    {
+                        string[] cLines = toWrite.Replace("\r", "")
+                            .Split(new string[] { "\n" }
+                            , StringSplitOptions.RemoveEmptyEntries);
+
+                        string param = "";
+
+                        for (i = 1; i < cLines.Length; i++)
+                        {
+                            param += cLines[i];
+                        }
+
+                        process.StartInfo.UseShellExecute = false;
+                        process.StartInfo.RedirectStandardOutput = false;
+                        process.StartInfo.FileName = cLines[0];
+                        process.StartInfo.Arguments = param;
+                        process.Start();
                     }
                 }
-                return -1;
+                return name.EndsWith("*") ? 1 : -1;
             }
             return 0;
         }
 
-        private string[][] Trimming(string str)
+        private string[][] MyTrimming(string str)
         {
             string[] lines = str.Replace("\r", "").Split('\n');
             List<string> lineList = new List<string>();
