@@ -26,7 +26,7 @@ namespace SSMSHelper2
         [DllImport("user32.dll")]
         public static extern bool SetKeyboardState(byte[] lpKeyState);
 
-        private static readonly List<MyCommand> commands = new List<MyCommand>();
+        private static readonly List<MyCommand> Commands = new List<MyCommand>();
 
         public Form1()
         {
@@ -39,18 +39,7 @@ namespace SSMSHelper2
 
             checkBox1.Checked = true;
 
-            //Environment.NewLine cr + lf (13 + 10)
-
-            DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory());
-            FileInfo[] files = di.GetFiles();
-            foreach (FileInfo fi in files)
-            {
-                if (fi.Name.StartsWith("!"))
-                {
-                    //Console.WriteLine(fi.FullName);
-                    commands.Add(new MyCommand(File.ReadAllText(fi.FullName)));
-                }
-            }
+            LoadSetting();
         }
 
         private static int KCallback(IntPtr code, int key)
@@ -59,7 +48,7 @@ namespace SSMSHelper2
             {
                 //Console.WriteLine(key);
                 //New Object Model Test
-                foreach (MyCommand myCommand in commands)
+                foreach (MyCommand myCommand in Commands)
                 {
                     int res;
                     //0 -> no action, -1 -> action, 1 -> action and sendkey
@@ -107,6 +96,21 @@ namespace SSMSHelper2
             return "";
         }
 
+        private static void LoadSetting()
+        {
+            Commands.Clear();
+            DirectoryInfo di = new DirectoryInfo(Directory.GetCurrentDirectory());
+            FileInfo[] files = di.GetFiles();
+            foreach (FileInfo fi in files)
+            {
+                if (fi.Name.StartsWith("!"))
+                {
+                    Console.WriteLine(fi.FullName);
+                    Commands.Add(new MyCommand(File.ReadAllText(fi.FullName)));
+                }
+            }
+        }
+
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox1.Checked)
@@ -117,6 +121,11 @@ namespace SSMSHelper2
             {
                 TopMost = false;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            LoadSetting();
         }
     }
 
@@ -265,12 +274,12 @@ namespace SSMSHelper2
             if (Matches(keyIn, shift, control))
             {
                 //Run Step
-                if (type == "1")
+                if (type == "1")//key conversion
                 {
                     Console.WriteLine(keyIn + " in / " + content + " out");
                     SendKeys.Send(content);
                 }
-                else if (type[0] == '2')
+                else if (type[0] == '2')//write text
                 {
                     string original = Clipboard.GetText();
                     string toWrite = "";
@@ -321,7 +330,7 @@ namespace SSMSHelper2
                     SendKeys.Send((control ? "" : "^") + "{v}");
                     Clipboard.SetText(original ?? "");
                 }
-                else if (type[0] == '3')
+                else if (type[0] == '3')//run exe
                 {
                     string original = Clipboard.GetText();
                     string[][] items = MyTrimming(original);

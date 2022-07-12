@@ -256,3 +256,5 @@
 
                     //SendKeys.Send((control ? "" : "^") + "{v}");
                     //Clipboard.SetText(original ?? "");
+
+                    //Environment.NewLine cr + lf (13 + 10)

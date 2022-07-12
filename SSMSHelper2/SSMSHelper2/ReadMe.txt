@@ -4,43 +4,54 @@ pre parts
 include (starts with +)
 exclude (starts with -)
 
-@
-1st parts
-input key (based on sendkeys syntax rules)
-<1 line break>
+-----Example-----
 
-2nd parts
-output types
+@Part0 //Name (Just for tag, if it's starts with !, it doesn't loaded)
+{F9} //Key which to hook (Only 1 key, shift + / control ^)
+1 //Action type (Please refer to below)
+{END}+{HOME}{BACKSPACE} //Content (Depends on action type)
 
-1:key 
+@!Part1
+{F9}
+1
+{END}+{HOME}{BACKSPACE}
 
-2:text write 
-2-1:text write
-2-2:text write with paste
-2-3:text write with paste and repeat lines
+-----~Eample-----
 
-3:run batch file
-3-1 run batch file
-3-2 run batch file with parameters
-3-3 run batch file with parameters and repeat lines
-<1 line break>
+-----Action Types-----
 
-3rd parts
-output data
+1 -> Key conversion
+Content : sendkey string to key out
 
-1:key macro (based on sendkeys syntax rules)
+2 -> text write 
 
-2:
-2-1:text
+SubCommands
+	2-1:Just write text in content
 
-2-2:text with {0} {1} {2} ... -> will replaced with texts in clipboard seperated by space
+	2-2:Write text in content after replace {%n} parts with data in clipboard(spliietd by space 0 1 2 ..)
 
-2-3:text with {0} {1} {2} ... -> will replaced with texts in clipboard seperated by space 
-and repeated with line breaks
+	2-3:3 lines for content, if we paste,
+	line1 -> just line 1 in content
+	line2 -> if data in clipboard like 2-2 and also multilines, repeat as many as lines in clipboard
+	line3 -> just line 3 in content
 
-3:
-3-1:batch file name -> just execute
-3-2:read all batch files text and replace the {0}, {1}, {2} in clipboards seperated by space and execute
-3-3:read all batch files text and replace the {0}, {1}, {2} in clipboards seperated by space
-and repeated with line breaks and execute
+	3:run exe file
+~SubCommands
 
+SubCommands
+	3-1:run with command prompt + parameters
+
+	3-2:do 3-1 without command prompt but standard output 
+	(has subtypes depends on how to return output)
+
+	SubSubCommands
+		3-2-1:export as file and write filename to console
+		3-2-2:export as file and open file using notepad
+		3-2-3:storer output text in clipboard
+		3-2-4:write output text
+	~SubSubCommands
+
+	3-3:open exe file with parameters (no console, no standard output)
+~SubCommands
+
+-----~Action Types-----

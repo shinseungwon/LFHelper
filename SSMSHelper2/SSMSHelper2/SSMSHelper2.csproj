@@ -83,6 +83,8 @@
   <ItemGroup>
     <Content Include="Backup.txt" />
     <Content Include="Examples.txt" />
+    <Content Include="Keys.txt" />
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
