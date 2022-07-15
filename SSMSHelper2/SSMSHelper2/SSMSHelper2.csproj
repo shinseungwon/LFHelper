@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>sql-server-icon-png-11348-Windows.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
@@ -85,6 +88,7 @@
     <Content Include="Examples.txt" />
     <Content Include="Keys.txt" />
     <Content Include="ReadMe.txt" />
+    <Content Include="sql-server-icon-png-11348-Windows.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -105,7 +105,7 @@ namespace SSMSHelper2
             {
                 if (fi.Name.StartsWith("!"))
                 {
-                    Console.WriteLine(fi.FullName);
+                    //Console.WriteLine(fi.FullName);
                     Commands.Add(new MyCommand(File.ReadAllText(fi.FullName)));
                 }
             }
@@ -269,14 +269,15 @@ namespace SSMSHelper2
         public int Execute(int keyCode, bool shift, bool control)
         {
             Keys keyObj = (Keys)keyCode;
-            string keyIn = "{" + keyObj.ToString() + "}";
+            string keyIn = "{" + keyObj.ToString() + "}";            
 
             if (Matches(keyIn, shift, control))
             {
+                Console.Write(keyIn + " matches / ");
                 //Run Step
                 if (type == "1")//key conversion
                 {
-                    Console.WriteLine(keyIn + " in / " + content + " out");
+                    Console.WriteLine(content + " out");
                     SendKeys.Send(content);
                 }
                 else if (type[0] == '2')//write text
@@ -329,6 +330,7 @@ namespace SSMSHelper2
                     Clipboard.SetText(toWrite ?? "");
                     SendKeys.Send((control ? "" : "^") + "{v}");
                     Clipboard.SetText(original ?? "");
+                    Console.WriteLine(toWrite + " Text Out");
                 }
                 else if (type[0] == '3')//run exe
                 {
@@ -412,6 +414,8 @@ namespace SSMSHelper2
                         process.StartInfo.Arguments = param;
                         process.Start();
                     }
+
+                    Console.WriteLine("Process Start");
                 }
                 return name.EndsWith("*") ? 1 : -1;
             }

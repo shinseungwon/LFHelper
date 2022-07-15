@@ -137,7 +137,7 @@ namespace FileSeekerV2
             {
                 try
                 {
-                    CheckDir(new DirectoryInfo(s), resDir, textBox2.Text, textBox3.Text);
+                    CheckDir(new DirectoryInfo(s), resDir);
                 }
                 catch (Exception e)
                 {
@@ -164,8 +164,15 @@ namespace FileSeekerV2
             Print(result.ToString() + Results.Count + " Results");
         }
 
-        private void CheckDir(DirectoryInfo d, string dir, string th, string ch)
+        private void CheckDir(DirectoryInfo d, string dir)
         {
+            string directoryLike = textBox7.Text;
+            string titleLike = textBox2.Text;
+            string contentLike = textBox3.Text;
+
+            string directoryDateTime = textBox5.Text;
+            string fileDateTime = textBox6.Text;
+
             Console.WriteLine("CheckDir : " + dir);
             if (Stop)
             {
@@ -174,25 +181,9 @@ namespace FileSeekerV2
 
             foreach (FileInfo f in d.GetFiles())
             {
-                if (f.Extension == ".zip" && checkBox1.Checked)
+                if (f.Extension == ".zip" && checkBox1.Checked && f.Name.Contains(directoryLike)
+                    && CheckDateTime(f.CreationTime, directoryDateTime))
                 {
-                    string thZip = "", thFile = "";
-                    if (th.Contains("/"))
-                    {
-                        string[] thSplit = th.Split('/');
-                        thZip = thSplit[0];
-                        thFile = thSplit[1];
-                    }
-                    else
-                    {
-                        thFile = th;
-                    }
-
-                    if (thZip != "" && !f.Name.Contains(thZip))
-                    {
-                        continue;
-                    }
-
                     using (ZipArchive za = ZipFile.OpenRead(f.FullName))
                     {
                         foreach (ZipArchiveEntry zae in za.Entries)
@@ -200,16 +191,14 @@ namespace FileSeekerV2
                             if (zae.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
                                 || zae.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                             {
-                                //if (!File.Exists(dir + @"\" + zae.Name) && zae.Name.Contains(th))
-
-                                if (zae.Name.Contains(thFile))
+                                if (zae.Name.Contains(titleLike))
                                 {
                                     using (Stream s = zae.Open())
                                     {
                                         using (StreamReader sr = new StreamReader(s))
                                         {
                                             string content = sr.ReadToEnd();
-                                            if (content.Contains(ch))
+                                            if (content.Contains(contentLike))
                                             {
                                                 Print("\n----------------------------------------\n"
                                                     + "File Found From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
@@ -229,11 +218,10 @@ namespace FileSeekerV2
                 }
                 else if (f.Extension == ".txt" || f.Extension == ".csv")
                 {
-                    //if (!File.Exists(dir + @"\" + f.Name) && f.Name.Contains(th))
-                    if (f.Name.Contains(th))
+                    if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         string content = File.ReadAllText(f.FullName);
-                        if (content.Contains(ch))
+                        if (content.Contains(contentLike))
                         {
                             Print("\n--------------------------------------------------\n"
                                 + "File Found : \n" + dir + @"\" + f.Name + "\n From : \n" + f.FullName
@@ -248,7 +236,7 @@ namespace FileSeekerV2
                 }
                 else
                 {
-                    if (f.Name.Contains(th))
+                    if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         Print("\n--------------------------------------------------\n"
                             + "File Found : \n" + dir + @"\" + f.Name + "\n From : \n" + f.FullName
@@ -264,8 +252,48 @@ namespace FileSeekerV2
 
             foreach (DirectoryInfo dd in d.GetDirectories())
             {
-                CheckDir(dd, dir, th, ch);
+                if (dd.Name.Contains(directoryLike)
+                    && CheckDateTime(dd.CreationTime, directoryDateTime))
+                {
+                    CheckDir(dd, dir);
+                }
             }
+        }
+
+        private bool CheckDateTime(DateTime dt, string compare)
+        {
+            if (compare.Length == 8)//yyyymmdd
+            {
+                try
+                {
+                    DateTime comp1 = DateTime.Parse(compare);
+                    DateTime comp2 = comp1.AddDays(1);
+                    return comp1 <= dt && comp2 >= dt;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            else if (compare.Length == 17 || compare.Length == 31)//yyyymmdd/yyyymmdd or yyyymmdd hhmmss/yyyymmddhhmmss
+            {
+
+                try
+                {
+                    string[] dates = compare.Split(new string[] { "/" }
+                    , StringSplitOptions.RemoveEmptyEntries);
+                    DateTime comp1 = DateTime.Parse(dates[0]);
+                    DateTime comp2 = DateTime.Parse(dates[1]);
+
+                    return comp1 <= dt && comp2 >= dt;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            return false;
         }
 
         private void Print(string s)
