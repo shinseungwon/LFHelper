@@ -55,6 +55,14 @@ namespace FileSeekerV2
                     }
                 }
             }
+
+            checkBox2.Checked = true;
+
+            textBox5.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
+                + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+
+            textBox6.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
+                + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         }
 
         private void BaseKeyEvent(object sender, KeyEventArgs args)
@@ -156,12 +164,14 @@ namespace FileSeekerV2
             SetControlPropertyThreadSafe(checkBox1, "Enabled", true);
             SetControlPropertyThreadSafe(checkBox2, "Enabled", true);
 
+            Print("\n\n--------------------------------------------------");
             StringBuilder result = new StringBuilder();
             foreach (string s in Results)
             {
                 result.Append(s + Environment.NewLine);
             }
             Print(result.ToString() + Results.Count + " Results");
+            Print("\n\n--------------------------------------------------");
         }
 
         private void CheckDir(DirectoryInfo d, string dir)
@@ -173,7 +183,7 @@ namespace FileSeekerV2
             string directoryDateTime = textBox5.Text;
             string fileDateTime = textBox6.Text;
 
-            Console.WriteLine("CheckDir : " + dir);
+            Console.WriteLine("CheckDir : " + d.FullName);
             if (Stop)
             {
                 return;
@@ -181,32 +191,38 @@ namespace FileSeekerV2
 
             foreach (FileInfo f in d.GetFiles())
             {
-                if (f.Extension == ".zip" && checkBox1.Checked && f.Name.Contains(directoryLike)
-                    && CheckDateTime(f.CreationTime, directoryDateTime))
+                if (f.Extension == ".zip")
                 {
-                    using (ZipArchive za = ZipFile.OpenRead(f.FullName))
+                    if (checkBox1.Checked && f.Name.Contains(directoryLike)
+                    && CheckDateTime(f.CreationTime, directoryDateTime))
                     {
-                        foreach (ZipArchiveEntry zae in za.Entries)
+                        Console.Write("Check zip file : " + f.Name);
+                        using (ZipArchive za = ZipFile.OpenRead(f.FullName))
                         {
-                            if (zae.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
-                                || zae.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
+                            Console.WriteLine(" " + za.Entries.Count + " Items");
+                            foreach (ZipArchiveEntry zae in za.Entries)
                             {
-                                if (zae.Name.Contains(titleLike))
+                                Console.WriteLine(zae.Name);
+                                if (zae.FullName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
+                                    || zae.FullName.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    using (Stream s = zae.Open())
+                                    if (zae.Name.Contains(titleLike))
                                     {
-                                        using (StreamReader sr = new StreamReader(s))
+                                        using (Stream s = zae.Open())
                                         {
-                                            string content = sr.ReadToEnd();
-                                            if (content.Contains(contentLike))
+                                            using (StreamReader sr = new StreamReader(s))
                                             {
-                                                Print("\n----------------------------------------\n"
-                                                    + "File Found From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
-                                                    + "\n----------------------------------------\n");
-                                                Results.Add(zae.FullName);
-                                                if (checkBox2.Checked)
+                                                string content = sr.ReadToEnd();
+                                                if (content.Contains(contentLike))
                                                 {
-                                                    zae.ExtractToFile(dir + @"\" + zae.Name);
+                                                    Print("\n----------------------------------------\n"
+                                                        + "File Found From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
+                                                        + "\n----------------------------------------\n");
+                                                    Results.Add(zae.FullName);
+                                                    if (checkBox2.Checked)
+                                                    {
+                                                        zae.ExtractToFile(dir + @"\" + zae.Name);
+                                                    }
                                                 }
                                             }
                                         }
@@ -218,13 +234,14 @@ namespace FileSeekerV2
                 }
                 else if (f.Extension == ".txt" || f.Extension == ".csv")
                 {
+                    Console.WriteLine("Check File with Content : " + f.Name);
                     if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         string content = File.ReadAllText(f.FullName);
                         if (content.Contains(contentLike))
                         {
                             Print("\n--------------------------------------------------\n"
-                                + "File Found : \n" + dir + @"\" + f.Name + "\n From : \n" + f.FullName
+                                + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
                                 + "\n--------------------------------------------------\n");
                             Results.Add(f.FullName);
                             if (checkBox2.Checked)
@@ -236,10 +253,11 @@ namespace FileSeekerV2
                 }
                 else
                 {
+                    Console.WriteLine("Check File : " + f.Name);
                     if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         Print("\n--------------------------------------------------\n"
-                            + "File Found : \n" + dir + @"\" + f.Name + "\n From : \n" + f.FullName
+                            + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
                             + "\n--------------------------------------------------\n");
                         Results.Add(f.FullName);
                         if (checkBox2.Checked)
@@ -262,7 +280,11 @@ namespace FileSeekerV2
 
         private bool CheckDateTime(DateTime dt, string compare)
         {
-            if (compare.Length == 8)//yyyymmdd
+            if(compare.Length == 0)
+            {
+                return true;
+            }
+            else if (compare.Length == 10)//yyyy-mm-dd
             {
                 try
                 {
@@ -272,12 +294,12 @@ namespace FileSeekerV2
                 }
                 catch
                 {
+                    Console.WriteLine("Wrong Date Type");
                     return false;
                 }
             }
-            else if (compare.Length == 17 || compare.Length == 31)//yyyymmdd/yyyymmdd or yyyymmdd hhmmss/yyyymmddhhmmss
-            {
-
+            else if (compare.Length == 21 || compare.Length == 41)
+            {//yyyy-mm-dd/yyyy-mm-dd or yyyy-mm-dd hh:mm:ss/yyyy-mm-dd hh:mm:ss
                 try
                 {
                     string[] dates = compare.Split(new string[] { "/" }
@@ -289,8 +311,13 @@ namespace FileSeekerV2
                 }
                 catch
                 {
+                    Console.WriteLine("Wrong Date Type");
                     return false;
                 }
+            }
+            else
+            {
+                Console.WriteLine("Wrong Date Type");
             }
 
             return false;
