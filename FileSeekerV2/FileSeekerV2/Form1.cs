@@ -47,11 +47,11 @@ namespace FileSeekerV2
                     ListViewItem l = listView1.Items.Add(dir);
                     if (Directory.Exists(l.Text))
                     {
-                        l.BackColor = Color.Green;
+                        l.BackColor = Color.LightGreen;
                     }
                     else
                     {
-                        l.BackColor = Color.Red;
+                        l.BackColor = Color.LightPink;
                     }
                 }
             }
@@ -83,43 +83,16 @@ namespace FileSeekerV2
                 textBox1.Text = "";
                 button1.Text = "STOP";
 
-                if (textBox4.Text != "")
+                if (Directory.Exists(textBox4.Text))
                 {
-                    if (Directory.Exists(textBox4.Text))
-                    {
-                        Targets.Add(textBox4.Text);
-                    }
-                    else
-                    {
-                        Print("Invalid target directory");
-                    }
+                    Targets.Add(textBox4.Text);
+                    Thread thread = new Thread(Search);
+                    thread.Start();
                 }
                 else
                 {
-                    if (listView1.SelectedItems.Count == 0)
-                    {
-                        foreach (ListViewItem l in listView1.Items)
-                        {
-                            if (Directory.Exists(l.Text))
-                            {
-                                Targets.Add(l.Text);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        foreach (ListViewItem l in listView1.SelectedItems)
-                        {
-                            if (Directory.Exists(l.Text))
-                            {
-                                Targets.Add(l.Text);
-                            }
-                        }
-                    }
+                    Print("Invalid target directory");
                 }
-
-                Thread thread = new Thread(Search);
-                thread.Start();
             }
             else if (button1.Text == "STOP")
             {
@@ -280,7 +253,7 @@ namespace FileSeekerV2
 
         private bool CheckDateTime(DateTime dt, string compare)
         {
-            if(compare.Length == 0)
+            if (compare.Length == 0)
             {
                 return true;
             }
