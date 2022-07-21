@@ -39,7 +39,7 @@ namespace FileSeekerV2
             }
 
             string preset = File.ReadAllText("Preset.txt");
-            string[] dirs = preset.Split('\n');
+            string[] dirs = preset.Replace("\r", "").Split('\n');
             foreach (string dir in dirs)
             {
                 if (!dir.StartsWith("'"))
@@ -58,11 +58,11 @@ namespace FileSeekerV2
 
             checkBox2.Checked = true;
 
-            textBox5.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
-                + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+            //textBox5.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
+            //    + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
 
-            textBox6.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
-                + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+            //textBox6.Text = DateTime.Now.ToString("yyyy-MM-dd") + "/"
+            //    + DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
         }
 
         private void BaseKeyEvent(object sender, KeyEventArgs args)
@@ -77,20 +77,21 @@ namespace FileSeekerV2
         {
             if (button1.Text == "GO")
             {
-                Targets.Clear();
-                Results.Clear();
-                LogText.Clear();
-                textBox1.Text = "";
-                button1.Text = "STOP";
-
                 if (Directory.Exists(textBox4.Text))
                 {
+                    Targets.Clear();
+                    Results.Clear();
+                    LogText.Clear();
+                    textBox1.Text = "";
+                    button1.Text = "STOP";
+
                     Targets.Add(textBox4.Text);
                     Thread thread = new Thread(Search);
                     thread.Start();
                 }
                 else
                 {
+                    Console.WriteLine(textBox4.Text);
                     Print("Invalid target directory");
                 }
             }
@@ -149,11 +150,11 @@ namespace FileSeekerV2
 
         private void CheckDir(DirectoryInfo d, string dir)
         {
-            string directoryLike = textBox7.Text;
+            string zipLike = textBox7.Text;
             string titleLike = textBox2.Text;
             string contentLike = textBox3.Text;
 
-            string directoryDateTime = textBox5.Text;
+            string zipDateTime = textBox5.Text;
             string fileDateTime = textBox6.Text;
 
             Console.WriteLine("CheckDir : " + d.FullName);
@@ -166,8 +167,8 @@ namespace FileSeekerV2
             {
                 if (f.Extension == ".zip")
                 {
-                    if (checkBox1.Checked && f.Name.Contains(directoryLike)
-                    && CheckDateTime(f.CreationTime, directoryDateTime))
+                    if (checkBox1.Checked && f.Name.Contains(zipLike)
+                    && CheckDateTime(f.CreationTime, zipDateTime))
                     {
                         Console.Write("Check zip file : " + f.Name);
                         using (ZipArchive za = ZipFile.OpenRead(f.FullName))
@@ -195,6 +196,11 @@ namespace FileSeekerV2
                                                     if (checkBox2.Checked)
                                                     {
                                                         zae.ExtractToFile(dir + @"\" + zae.Name);
+                                                    }
+
+                                                    if (!checkBox4.Checked)
+                                                    {
+                                                        return;
                                                     }
                                                 }
                                             }
@@ -243,11 +249,7 @@ namespace FileSeekerV2
 
             foreach (DirectoryInfo dd in d.GetDirectories())
             {
-                if (dd.Name.Contains(directoryLike)
-                    && CheckDateTime(dd.CreationTime, directoryDateTime))
-                {
-                    CheckDir(dd, dir);
-                }
+                CheckDir(dd, dir);
             }
         }
 

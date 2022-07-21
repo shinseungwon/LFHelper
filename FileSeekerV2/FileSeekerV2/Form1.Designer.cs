@@ -49,6 +49,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
+            this.checkBox4 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox1
@@ -187,9 +188,9 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(10, 418);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(267, 12);
+            this.label4.Size = new System.Drawing.Size(89, 12);
             this.label4.TabIndex = 12;
-            this.label4.Text = "DirectoryDateTime (also .zip file\'s datatime) : ";
+            this.label4.Text = "ZipDateTime : ";
             // 
             // label5
             // 
@@ -202,14 +203,14 @@
             // 
             // textBox5
             // 
-            this.textBox5.Location = new System.Drawing.Point(283, 415);
+            this.textBox5.Location = new System.Drawing.Point(105, 415);
             this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(304, 21);
+            this.textBox5.Size = new System.Drawing.Size(482, 21);
             this.textBox5.TabIndex = 4;
             // 
             // textBox6
             // 
-            this.textBox6.Location = new System.Drawing.Point(107, 442);
+            this.textBox6.Location = new System.Drawing.Point(105, 442);
             this.textBox6.Name = "textBox6";
             this.textBox6.Size = new System.Drawing.Size(480, 21);
             this.textBox6.TabIndex = 5;
@@ -229,22 +230,33 @@
             this.label7.AutoSize = true;
             this.label7.Location = new System.Drawing.Point(13, 340);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(247, 12);
+            this.label7.Size = new System.Drawing.Size(62, 12);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Directory Like (also .zip file\'s name like) : ";
+            this.label7.Text = "Zip Like : ";
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(260, 337);
+            this.textBox7.Location = new System.Drawing.Point(81, 337);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(111, 21);
+            this.textBox7.Size = new System.Drawing.Size(290, 21);
             this.textBox7.TabIndex = 0;
+            // 
+            // checkBox4
+            // 
+            this.checkBox4.AutoSize = true;
+            this.checkBox4.Location = new System.Drawing.Point(442, 393);
+            this.checkBox4.Name = "checkBox4";
+            this.checkBox4.Size = new System.Drawing.Size(66, 16);
+            this.checkBox4.TabIndex = 18;
+            this.checkBox4.Text = "Find All";
+            this.checkBox4.UseVisualStyleBackColor = true;
             // 
             // FileSeekerV2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 470);
+            this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
@@ -297,6 +309,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox7;
+        private System.Windows.Forms.CheckBox checkBox4;
     }
 }
 
