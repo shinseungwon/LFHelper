@@ -50,6 +50,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.textBox7 = new System.Windows.Forms.TextBox();
             this.checkBox4 = new System.Windows.Forms.CheckBox();
+            this.checkBox5 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // textBox1
@@ -78,6 +79,7 @@
             this.listView1.TabStop = false;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.Click += new System.EventHandler(this.listView1_Click);
             this.listView1.DoubleClick += new System.EventHandler(this.listView1_DoubleClick);
             this.listView1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BaseKeyEvent);
             // 
@@ -88,7 +90,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(451, 337);
+            this.textBox2.Location = new System.Drawing.Point(440, 337);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(142, 21);
             this.textBox2.TabIndex = 1;
@@ -96,9 +98,9 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(692, 337);
+            this.textBox3.Location = new System.Drawing.Point(710, 337);
             this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(225, 21);
+            this.textBox3.Size = new System.Drawing.Size(207, 21);
             this.textBox3.TabIndex = 2;
             this.textBox3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BaseKeyEvent);
             // 
@@ -116,18 +118,19 @@
             // checkBox1
             // 
             this.checkBox1.AutoSize = true;
-            this.checkBox1.Location = new System.Drawing.Point(315, 391);
+            this.checkBox1.Location = new System.Drawing.Point(15, 339);
             this.checkBox1.Name = "checkBox1";
             this.checkBox1.Size = new System.Drawing.Size(42, 16);
             this.checkBox1.TabIndex = 6;
             this.checkBox1.Text = "Zip";
             this.checkBox1.UseVisualStyleBackColor = true;
+            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             this.checkBox1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.BaseKeyEvent);
             // 
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(370, 391);
+            this.checkBox2.Location = new System.Drawing.Point(315, 391);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(66, 16);
             this.checkBox2.TabIndex = 7;
@@ -159,20 +162,20 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(377, 340);
+            this.label1.Location = new System.Drawing.Point(308, 340);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(68, 12);
+            this.label1.Size = new System.Drawing.Size(126, 12);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Title Like : ";
+            this.label1.Text = "Other File Title Like : ";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(599, 340);
+            this.label2.Location = new System.Drawing.Point(593, 340);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(87, 12);
+            this.label2.Size = new System.Drawing.Size(111, 12);
             this.label2.TabIndex = 10;
-            this.label2.Text = "Content Like : ";
+            this.label2.Text = "File Content Like : ";
             // 
             // label3
             // 
@@ -228,34 +231,47 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(13, 340);
+            this.label7.Location = new System.Drawing.Point(63, 340);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(62, 12);
+            this.label7.Size = new System.Drawing.Size(114, 12);
             this.label7.TabIndex = 17;
-            this.label7.Text = "Zip Like : ";
+            this.label7.Text = "Zip File Title Like : ";
             // 
             // textBox7
             // 
-            this.textBox7.Location = new System.Drawing.Point(81, 337);
+            this.textBox7.Enabled = false;
+            this.textBox7.Location = new System.Drawing.Point(181, 337);
             this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(290, 21);
+            this.textBox7.Size = new System.Drawing.Size(121, 21);
             this.textBox7.TabIndex = 0;
             // 
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(442, 393);
+            this.checkBox4.Location = new System.Drawing.Point(387, 391);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(66, 16);
             this.checkBox4.TabIndex = 18;
             this.checkBox4.Text = "Find All";
             this.checkBox4.UseVisualStyleBackColor = true;
             // 
+            // checkBox5
+            // 
+            this.checkBox5.AutoSize = true;
+            this.checkBox5.Location = new System.Drawing.Point(459, 391);
+            this.checkBox5.Name = "checkBox5";
+            this.checkBox5.Size = new System.Drawing.Size(81, 16);
+            this.checkBox5.TabIndex = 19;
+            this.checkBox5.Text = "Drill Down";
+            this.checkBox5.UseVisualStyleBackColor = true;
+            // 
             // FileSeekerV2
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(933, 470);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(933, 469);
+            this.Controls.Add(this.checkBox5);
             this.Controls.Add(this.checkBox4);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.label7);
@@ -276,6 +292,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.listView1);
             this.Controls.Add(this.textBox1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "FileSeekerV2";
@@ -310,6 +327,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.CheckBox checkBox4;
+        private System.Windows.Forms.CheckBox checkBox5;
     }
 }
 

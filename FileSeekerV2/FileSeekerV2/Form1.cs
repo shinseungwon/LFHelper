@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
@@ -158,17 +159,12 @@ namespace FileSeekerV2
             string fileDateTime = textBox6.Text;
 
             Console.WriteLine("CheckDir : " + d.FullName);
-            if (Stop)
-            {
-                return;
-            }
 
             foreach (FileInfo f in d.GetFiles())
             {
-                if (f.Extension == ".zip")
+                if (f.Extension == ".zip" && checkBox1.Checked)
                 {
-                    if (checkBox1.Checked && f.Name.Contains(zipLike)
-                    && CheckDateTime(f.CreationTime, zipDateTime))
+                    if (f.Name.Contains(zipLike) && CheckDateTime(f.CreationTime, zipDateTime))
                     {
                         Console.Write("Check zip file : " + f.Name);
                         using (ZipArchive za = ZipFile.OpenRead(f.FullName))
@@ -187,7 +183,7 @@ namespace FileSeekerV2
                                             using (StreamReader sr = new StreamReader(s))
                                             {
                                                 string content = sr.ReadToEnd();
-                                                if (content.Contains(contentLike))
+                                                if (contentLike != "" && content.Contains(contentLike))
                                                 {
                                                     Print("\n----------------------------------------\n"
                                                         + "File Found From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
@@ -200,7 +196,8 @@ namespace FileSeekerV2
 
                                                     if (!checkBox4.Checked)
                                                     {
-                                                        return;
+                                                        Stop = true;
+                                                        break;
                                                     }
                                                 }
                                             }
@@ -211,11 +208,13 @@ namespace FileSeekerV2
                         }
                     }
                 }
-                else if (f.Extension == ".txt" || f.Extension == ".csv")
+                else if (f.Extension == ".txt" || f.Extension == ".csv"
+                    || f.Extension == ".xml" || f.Extension == ".json")
                 {
-                    Console.WriteLine("Check File with Content : " + f.Name);
-                    if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
+                    if (contentLike != "" && f.Name.Contains(titleLike)
+                        && CheckDateTime(f.CreationTime, fileDateTime))
                     {
+                        Console.WriteLine("Check File with Content : " + f.Name);
                         string content = File.ReadAllText(f.FullName);
                         if (content.Contains(contentLike))
                         {
@@ -245,11 +244,23 @@ namespace FileSeekerV2
                         }
                     }
                 }
+
+                if (Stop)
+                {
+                    break;
+                }
             }
 
-            foreach (DirectoryInfo dd in d.GetDirectories())
+            if (checkBox5.Checked)
             {
-                CheckDir(dd, dir);
+                foreach (DirectoryInfo dd in d.GetDirectories())
+                {
+                    if (Stop)
+                    {
+                        break;
+                    }
+                    CheckDir(dd, dir);
+                }
             }
         }
 
@@ -324,13 +335,41 @@ namespace FileSeekerV2
             ListView lv = (ListView)sender;
             if (lv.SelectedItems.Count == 1)
             {
-                textBox4.Text = lv.SelectedItems[0].Text;
+                if (Directory.Exists(lv.SelectedItems[0].Text))
+                {
+                    Process.Start(lv.SelectedItems[0].Text);
+                }
             }
         }
 
         private void checkBox3_CheckedChanged(object sender, EventArgs e)
         {
             TopMost = checkBox3.Checked;
+        }
+
+        private void listView1_Click(object sender, EventArgs e)
+        {
+            ListView lv = (ListView)sender;
+            if (lv.SelectedItems.Count == 1)
+            {
+                if (Directory.Exists(lv.SelectedItems[0].Text))
+                {
+                    textBox4.Text = lv.SelectedItems[0].Text;
+                }
+            }
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox1.Checked)
+            {
+                textBox7.Enabled = true;
+            }
+            else
+            {
+                textBox7.Text = "";
+                textBox7.Enabled = false;
+            }
         }
     }
 }
