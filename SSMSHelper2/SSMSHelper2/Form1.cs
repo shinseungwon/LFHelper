@@ -519,14 +519,14 @@ namespace SSMSHelper2
             }
         }
 
-        private static IntPtr SetHookMouse(LowLevelProc proc)
-        {
-            using (Process curProcess = Process.GetCurrentProcess())
-            using (ProcessModule curModule = curProcess.MainModule)
-            {
-                return SetWindowsHookEx(WH_MOUSE_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
-            }
-        }
+        //private static IntPtr SetHookMouse(LowLevelProc proc)
+        //{
+        //    using (Process curProcess = Process.GetCurrentProcess())
+        //    using (ProcessModule curModule = curProcess.MainModule)
+        //    {
+        //        return SetWindowsHookEx(WH_MOUSE_LL, proc, GetModuleHandle(curModule.ModuleName), 0);
+        //    }
+        //}
 
         private static IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
@@ -592,7 +592,7 @@ namespace SSMSHelper2
         public static void EnableHook()
         {
             _hookID = SetHookKeyBoard(_proc);
-            _hookID = SetHookMouse(_proc);
+            //_hookID = SetHookMouse(_proc);
         }
 
         public static void DisableHook()
