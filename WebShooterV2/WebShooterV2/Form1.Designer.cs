@@ -29,149 +29,123 @@ namespace WebShooterV2
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tbUrl = new System.Windows.Forms.TextBox();
             this.tbHeader = new System.Windows.Forms.TextBox();
             this.tbBody = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.lvData = new System.Windows.Forms.ListView();
-            this.Line = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.bGo = new System.Windows.Forms.Button();
             this.tbData = new System.Windows.Forms.TextBox();
-            this.bApply = new System.Windows.Forms.Button();
             this.lvResult = new System.Windows.Forms.ListView();
-            this.Title = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Result = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.tbResultDetail = new System.Windows.Forms.TextBox();
+            this.Request = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Response = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.Status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbResponse = new System.Windows.Forms.TextBox();
             this.tbResultLike = new System.Windows.Forms.TextBox();
             this.bExport = new System.Windows.Forms.Button();
             this.bLoad = new System.Windows.Forms.Button();
             this.lvTemplate = new System.Windows.Forms.ListView();
             this.Template = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbRequest = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // tbUrl
             // 
-            this.tbUrl.Location = new System.Drawing.Point(432, 12);
+            this.tbUrl.Location = new System.Drawing.Point(305, 12);
             this.tbUrl.Name = "tbUrl";
-            this.tbUrl.Size = new System.Drawing.Size(442, 21);
+            this.tbUrl.Size = new System.Drawing.Size(374, 21);
             this.tbUrl.TabIndex = 0;
             // 
             // tbHeader
             // 
-            this.tbHeader.Location = new System.Drawing.Point(432, 39);
+            this.tbHeader.Location = new System.Drawing.Point(305, 39);
             this.tbHeader.Multiline = true;
             this.tbHeader.Name = "tbHeader";
             this.tbHeader.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbHeader.Size = new System.Drawing.Size(442, 96);
+            this.tbHeader.Size = new System.Drawing.Size(374, 96);
             this.tbHeader.TabIndex = 1;
             // 
             // tbBody
             // 
-            this.tbBody.Location = new System.Drawing.Point(432, 141);
+            this.tbBody.Location = new System.Drawing.Point(305, 141);
             this.tbBody.Multiline = true;
             this.tbBody.Name = "tbBody";
             this.tbBody.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbBody.Size = new System.Drawing.Size(442, 288);
+            this.tbBody.Size = new System.Drawing.Size(374, 288);
             this.tbBody.TabIndex = 2;
             // 
-            // button1
+            // bGo
             // 
-            this.button1.Location = new System.Drawing.Point(432, 654);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(442, 23);
-            this.button1.TabIndex = 3;
-            this.button1.Text = "Go";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.bGo_Click);
-            // 
-            // lvData
-            // 
-            this.lvData.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Line,
-            this.Status});
-            this.lvData.HideSelection = false;
-            this.lvData.Location = new System.Drawing.Point(12, 12);
-            this.lvData.Name = "lvData";
-            this.lvData.Size = new System.Drawing.Size(414, 417);
-            this.lvData.TabIndex = 4;
-            this.lvData.UseCompatibleStateImageBehavior = false;
-            this.lvData.View = System.Windows.Forms.View.Details;
-            // 
-            // Line
-            // 
-            this.Line.Text = "Line";
-            this.Line.Width = 300;
-            // 
-            // Status
-            // 
-            this.Status.Text = "Status";
-            this.Status.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.Status.Width = 100;
+            this.bGo.Location = new System.Drawing.Point(434, 653);
+            this.bGo.Name = "bGo";
+            this.bGo.Size = new System.Drawing.Size(112, 23);
+            this.bGo.TabIndex = 3;
+            this.bGo.Text = "Go";
+            this.bGo.UseVisualStyleBackColor = true;
+            this.bGo.Click += new System.EventHandler(this.bGo_Click);
             // 
             // tbData
             // 
-            this.tbData.Location = new System.Drawing.Point(12, 436);
+            this.tbData.Location = new System.Drawing.Point(12, 12);
             this.tbData.Multiline = true;
             this.tbData.Name = "tbData";
             this.tbData.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbData.Size = new System.Drawing.Size(414, 212);
+            this.tbData.Size = new System.Drawing.Size(287, 665);
             this.tbData.TabIndex = 6;
-            // 
-            // bApply
-            // 
-            this.bApply.Location = new System.Drawing.Point(12, 654);
-            this.bApply.Name = "bApply";
-            this.bApply.Size = new System.Drawing.Size(414, 23);
-            this.bApply.TabIndex = 7;
-            this.bApply.Text = "Apply";
-            this.bApply.UseVisualStyleBackColor = true;
-            this.bApply.Click += new System.EventHandler(this.bApply_Click);
             // 
             // lvResult
             // 
             this.lvResult.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Title,
-            this.Result});
+            this.Request,
+            this.Response,
+            this.Status});
+            this.lvResult.FullRowSelect = true;
             this.lvResult.HideSelection = false;
-            this.lvResult.Location = new System.Drawing.Point(880, 12);
+            this.lvResult.Location = new System.Drawing.Point(1034, 12);
+            this.lvResult.MultiSelect = false;
             this.lvResult.Name = "lvResult";
-            this.lvResult.Size = new System.Drawing.Size(458, 417);
+            this.lvResult.Size = new System.Drawing.Size(304, 665);
             this.lvResult.TabIndex = 8;
             this.lvResult.UseCompatibleStateImageBehavior = false;
             this.lvResult.View = System.Windows.Forms.View.Details;
+            this.lvResult.SelectedIndexChanged += new System.EventHandler(this.lvResult_SelectedIndexChanged);
             // 
-            // Title
+            // Request
             // 
-            this.Title.Text = "Title";
-            this.Title.Width = 200;
+            this.Request.Text = "Request";
+            this.Request.Width = 100;
             // 
-            // Result
+            // Response
             // 
-            this.Result.Text = "Result";
-            this.Result.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.Result.Width = 200;
+            this.Response.Text = "Response";
+            this.Response.Width = 100;
             // 
-            // tbResultDetail
+            // Status
             // 
-            this.tbResultDetail.Location = new System.Drawing.Point(880, 436);
-            this.tbResultDetail.Multiline = true;
-            this.tbResultDetail.Name = "tbResultDetail";
-            this.tbResultDetail.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbResultDetail.Size = new System.Drawing.Size(458, 183);
-            this.tbResultDetail.TabIndex = 9;
+            this.Status.Text = "Status";
+            this.Status.Width = 100;
+            // 
+            // tbResponse
+            // 
+            this.tbResponse.Location = new System.Drawing.Point(685, 337);
+            this.tbResponse.Multiline = true;
+            this.tbResponse.Name = "tbResponse";
+            this.tbResponse.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbResponse.Size = new System.Drawing.Size(343, 339);
+            this.tbResponse.TabIndex = 9;
             // 
             // tbResultLike
             // 
-            this.tbResultLike.Location = new System.Drawing.Point(880, 627);
+            this.tbResultLike.Location = new System.Drawing.Point(305, 627);
             this.tbResultLike.Name = "tbResultLike";
-            this.tbResultLike.Size = new System.Drawing.Size(458, 21);
+            this.tbResultLike.Size = new System.Drawing.Size(374, 21);
             this.tbResultLike.TabIndex = 10;
+            this.tbResultLike.Text = "Success";
             // 
             // bExport
             // 
-            this.bExport.Location = new System.Drawing.Point(880, 654);
+            this.bExport.Location = new System.Drawing.Point(552, 653);
             this.bExport.Name = "bExport";
-            this.bExport.Size = new System.Drawing.Size(458, 23);
+            this.bExport.Size = new System.Drawing.Size(127, 23);
             this.bExport.TabIndex = 11;
             this.bExport.Text = "Export";
             this.bExport.UseVisualStyleBackColor = true;
@@ -179,9 +153,9 @@ namespace WebShooterV2
             // 
             // bLoad
             // 
-            this.bLoad.Location = new System.Drawing.Point(432, 625);
+            this.bLoad.Location = new System.Drawing.Point(305, 653);
             this.bLoad.Name = "bLoad";
-            this.bLoad.Size = new System.Drawing.Size(442, 23);
+            this.bLoad.Size = new System.Drawing.Size(123, 23);
             this.bLoad.TabIndex = 12;
             this.bLoad.Text = "Load";
             this.bLoad.UseVisualStyleBackColor = true;
@@ -192,9 +166,9 @@ namespace WebShooterV2
             this.lvTemplate.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.Template});
             this.lvTemplate.HideSelection = false;
-            this.lvTemplate.Location = new System.Drawing.Point(432, 436);
+            this.lvTemplate.Location = new System.Drawing.Point(305, 435);
             this.lvTemplate.Name = "lvTemplate";
-            this.lvTemplate.Size = new System.Drawing.Size(442, 183);
+            this.lvTemplate.Size = new System.Drawing.Size(374, 183);
             this.lvTemplate.TabIndex = 13;
             this.lvTemplate.UseCompatibleStateImageBehavior = false;
             this.lvTemplate.View = System.Windows.Forms.View.Details;
@@ -203,27 +177,36 @@ namespace WebShooterV2
             // Template
             // 
             this.Template.Text = "TemplateName";
-            this.Template.Width = 400;
+            this.Template.Width = 500;
+            // 
+            // tbRequest
+            // 
+            this.tbRequest.Location = new System.Drawing.Point(685, 12);
+            this.tbRequest.Multiline = true;
+            this.tbRequest.Name = "tbRequest";
+            this.tbRequest.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbRequest.Size = new System.Drawing.Size(343, 319);
+            this.tbRequest.TabIndex = 14;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1350, 689);
+            this.Controls.Add(this.tbRequest);
             this.Controls.Add(this.lvTemplate);
             this.Controls.Add(this.bLoad);
             this.Controls.Add(this.bExport);
             this.Controls.Add(this.tbResultLike);
-            this.Controls.Add(this.tbResultDetail);
+            this.Controls.Add(this.tbResponse);
             this.Controls.Add(this.lvResult);
-            this.Controls.Add(this.bApply);
             this.Controls.Add(this.tbData);
-            this.Controls.Add(this.lvData);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.bGo);
             this.Controls.Add(this.tbBody);
             this.Controls.Add(this.tbHeader);
             this.Controls.Add(this.tbUrl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
@@ -239,21 +222,19 @@ namespace WebShooterV2
         private System.Windows.Forms.TextBox tbUrl;
         private System.Windows.Forms.TextBox tbHeader;
         private System.Windows.Forms.TextBox tbBody;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.ListView lvData;
-        private System.Windows.Forms.ColumnHeader Line;
-        private System.Windows.Forms.ColumnHeader Status;
+        private System.Windows.Forms.Button bGo;
         private System.Windows.Forms.TextBox tbData;
-        private System.Windows.Forms.Button bApply;
         private System.Windows.Forms.ListView lvResult;
-        private System.Windows.Forms.ColumnHeader Title;
-        private System.Windows.Forms.ColumnHeader Result;
-        private System.Windows.Forms.TextBox tbResultDetail;
+        private System.Windows.Forms.ColumnHeader Request;
+        private System.Windows.Forms.ColumnHeader Response;
+        private System.Windows.Forms.TextBox tbResponse;
         private System.Windows.Forms.TextBox tbResultLike;
         private System.Windows.Forms.Button bExport;
         private System.Windows.Forms.Button bLoad;
         private System.Windows.Forms.ListView lvTemplate;
         private System.Windows.Forms.ColumnHeader Template;
+        private System.Windows.Forms.ColumnHeader Status;
+        private System.Windows.Forms.TextBox tbRequest;
     }
 }
 
