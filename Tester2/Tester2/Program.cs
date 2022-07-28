@@ -1,4 +1,9 @@
-﻿namespace Tester2
+﻿using System;
+using System.Data.OleDb;
+using System.IO;
+using System.IO.Compression;
+
+namespace Tester2
 {
     class Program
     {

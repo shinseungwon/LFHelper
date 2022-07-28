@@ -270,3 +270,81 @@
         //        }
         //    }
         //}
+
+
+                    //while (true)
+            //{
+            //    DirectoryInfo di = new DirectoryInfo(@"C:\Users\JeffreyShin\Documents\Bucket\220712");
+
+            //    foreach (FileInfo fi in di.GetFiles())
+            //    {
+            //        if (fi.Name == "preset.txt")
+            //        {
+            //            Console.WriteLine(fi.Name + "\n");
+
+            //            Console.WriteLine(fi.CreationTime);
+            //            Console.WriteLine(fi.LastAccessTime);
+            //            Console.WriteLine(fi.LastWriteTime);
+
+            //            Console.WriteLine("------------------\n\n\n");
+            //        }
+            //    }
+            //    Console.ReadLine();
+            //}
+
+            //DateTime dt = Convert.ToDateTime("2022-05-12 00:00:00");
+            //Console.WriteLine(dt.ToString("yyyyMMdd hh:mm:ss"));
+
+            //string dir = @"C:\Users\JeffreyShin\Documents\Bucket\220712\";
+            ////DirectoryInfo di = new DirectoryInfo(dir);
+            ////Console.WriteLine(di.CreationTime);
+            ////Console.WriteLine(di.LastAccessTime);
+
+            ////ZipFile.CreateFromDirectory(dir + "forzip1", dir + "test.zip");
+
+            //ZipArchive zipArchive = ZipFile.OpenRead(dir + "test.zip");
+            //foreach (ZipArchiveEntry zae in zipArchive.Entries)
+            //{
+            //    Console.WriteLine(zae.FullName);
+            //}
+            ////Folder - Creation time / Name Like
+            ////File - Creation Time / Name Like
+
+            //DateTime dt = DateTime.Parse("2022-05-12");
+            //DateTime dt = DateTime.Parse("2022-05-12 14:00:00/2022-05-16 12:00:00");
+            //Console.WriteLine(dt.ToString());
+
+            var connection = new OleDbConnection(@"Provider=Search.CollatorDSO;Extended Properties=""Application=Windows""");
+
+            // File name search (case insensitive), also searches sub directories
+            var query1 = @"SELECT System.ItemName FROM SystemIndex " +
+                        @"WHERE scope ='file:C:/' AND System.ItemName LIKE '%Test%'";
+
+            // File name search (case insensitive), does not search sub directories
+            var query2 = @"SELECT System.ItemName FROM SystemIndex " +
+                        @"WHERE directory = 'file:C:/' AND System.ItemName LIKE '%Test%' ";
+
+            // Folder name search (case insensitive)
+            var query3 = @"SELECT System.ItemName FROM SystemIndex " +
+                        @"WHERE scope = 'file:C:/' AND System.ItemType = 'Directory' AND System.Itemname LIKE '%Test%' ";
+
+            // Folder name search (case insensitive), does not search sub directories
+            var query4 = @"SELECT System.ItemName FROM SystemIndex " +
+                        //@"WHERE directory = 'file:C:/' AND System.ItemType = 'Directory' AND System.Itemname LIKE '%Test%' ";
+                        @"WHERE directory = 'file:C:\Users\JeffreyShin\Documents\' AND System.ItemType = 'Directory'";
+
+            connection.Open();
+
+            var command = new OleDbCommand(query4, connection);
+
+            using (var r = command.ExecuteReader())
+            {
+                while (r.Read())
+                {
+                    Console.WriteLine(r[0]);
+                }
+            }
+
+            connection.Close();
+
+            Console.ReadKey();

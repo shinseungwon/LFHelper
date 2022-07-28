@@ -12,7 +12,7 @@ namespace WebShooter
         //static void Main(string[] args)
         static void Main()
         {
-            string[] args = { "1", "0" }; //batchno, (0->not merge / 1->merge)
+            string[] args = { "1", "1" }; //batchno, (0->not merge / 1->merge)
             if (args.Length == 2)
             {
                 string header = File.ReadAllText(@"Header" + args[0] + ".txt");
