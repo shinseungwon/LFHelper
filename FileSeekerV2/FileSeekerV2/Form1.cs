@@ -86,6 +86,8 @@ namespace FileSeekerV2
                     textBox1.Text = "";
                     button1.Text = "STOP";
 
+                    listView2.Items.Add("Result at " + DateTime.Now.ToString());
+
                     Targets.Add(textBox4.Text);
                     Thread thread = new Thread(Search);
                     thread.Start();
@@ -189,9 +191,11 @@ namespace FileSeekerV2
                                                         + "File Found From Zip : \n" + zae.Name + "\n From : \n" + f.FullName
                                                         + "\n----------------------------------------\n");
                                                     Results.Add(zae.FullName);
+                                                    listView2.Items.Add(zae.FullName).BackColor = Color.LightBlue;
                                                     if (checkBox2.Checked)
                                                     {
                                                         zae.ExtractToFile(dir + @"\" + zae.Name);
+                                                        listView2.Items.Add(dir + @"\" + zae.Name).BackColor = Color.LightGray;
                                                     }
 
                                                     if (!checkBox4.Checked)
@@ -222,10 +226,17 @@ namespace FileSeekerV2
                                 + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
                                 + "\n--------------------------------------------------\n");
                             Results.Add(f.FullName);
+                            listView2.Items.Add(f.FullName).BackColor = Color.LightBlue;
                             if (checkBox2.Checked)
                             {
                                 File.Copy(f.FullName, dir + @"\" + f.Name);
+                                listView2.Items.Add(dir + @"\" + f.Name).BackColor = Color.LightGray;
                             }
+                        }
+                        if (!checkBox4.Checked)
+                        {
+                            Stop = true;
+                            break;
                         }
                     }
                 }
@@ -238,9 +249,16 @@ namespace FileSeekerV2
                             + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
                             + "\n--------------------------------------------------\n");
                         Results.Add(f.FullName);
+                        listView2.Items.Add(f.FullName).BackColor = Color.LightBlue;
                         if (checkBox2.Checked)
                         {
                             File.Copy(f.FullName, dir + @"\" + f.Name);
+                            listView2.Items.Add(dir + @"\" + f.Name).BackColor = Color.LightGray;
+                        }
+                        if (!checkBox4.Checked)
+                        {
+                            Stop = true;
+                            break;
                         }
                     }
                 }
@@ -369,6 +387,17 @@ namespace FileSeekerV2
             {
                 textBox7.Text = "";
                 textBox7.Enabled = false;
+            }
+        }
+
+        private void listView2_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listView2.SelectedItems.Count == 1)
+            {
+                if (File.Exists(listView2.SelectedItems[0].Text))
+                {
+                    Process.Start(listView2.SelectedItems[0].Text);
+                }                
             }
         }
     }
