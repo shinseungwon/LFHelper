@@ -80,17 +80,25 @@ namespace FileSeekerV2
             {
                 if (Directory.Exists(textBox4.Text))
                 {
-                    Targets.Clear();
-                    Results.Clear();
-                    LogText.Clear();
-                    textBox1.Text = "";
-                    button1.Text = "STOP";
+                    if(textBox2.Text == "" && textBox3.Text == "")
+                    {
+                        Print("Please set titlelike or contentlike or both");
+                    }
+                    else
+                    {
+                        Targets.Clear();
+                        Results.Clear();
+                        LogText.Clear();
+                        textBox1.Text = "";
+                        button1.Text = "STOP";
 
-                    listView2.Items.Add("Result at " + DateTime.Now.ToString());
+                        listView2.Items.Add("Result at " + DateTime.Now.ToString());
 
-                    Targets.Add(textBox4.Text);
-                    Thread thread = new Thread(Search);
-                    thread.Start();
+                        Targets.Add(textBox4.Text);
+                        Thread thread = new Thread(Search);
+                        thread.Start();
+                    }
+
                 }
                 else
                 {
@@ -215,12 +223,13 @@ namespace FileSeekerV2
                 else if (f.Extension == ".txt" || f.Extension == ".csv"
                     || f.Extension == ".xml" || f.Extension == ".json")
                 {
-                    if (contentLike != "" && f.Name.Contains(titleLike)
+                    if (((titleLike != "" && f.Name.Contains(titleLike)) 
+                        || titleLike == "" && contentLike != "")
                         && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         Console.WriteLine("Check File with Content : " + f.Name);
                         string content = File.ReadAllText(f.FullName);
-                        if (content.Contains(contentLike))
+                        if ((contentLike != "" && content.Contains(contentLike)) || contentLike == "")
                         {
                             Print("\n--------------------------------------------------\n"
                                 + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
@@ -243,7 +252,7 @@ namespace FileSeekerV2
                 else
                 {
                     Console.WriteLine("Check File : " + f.Name);
-                    if (f.Name.Contains(titleLike) && CheckDateTime(f.CreationTime, fileDateTime))
+                    if ((f.Name.Contains(titleLike) && titleLike != "") && CheckDateTime(f.CreationTime, fileDateTime))
                     {
                         Print("\n--------------------------------------------------\n"
                             + "File Found : \n" + f.FullName + @"\" + f.Name + "\n From : \n" + dir
