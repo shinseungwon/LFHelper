@@ -132,6 +132,7 @@ namespace WebShooterV2
             this.tbResponse.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbResponse.Size = new System.Drawing.Size(343, 339);
             this.tbResponse.TabIndex = 9;
+            this.tbResponse.WordWrap = false;
             // 
             // tbResultLike
             // 
@@ -187,6 +188,7 @@ namespace WebShooterV2
             this.tbRequest.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbRequest.Size = new System.Drawing.Size(343, 319);
             this.tbRequest.TabIndex = 14;
+            this.tbRequest.WordWrap = false;
             // 
             // Form1
             // 
