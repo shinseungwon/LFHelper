@@ -251,7 +251,7 @@ namespace WebShooterV2
 
                 tbUrl.Text = tUrl[index];
                 tbHeader.Text = tHeader[index];
-                tbBody.Text = tBody[index];
+                tbBody.Text = System.Xml.Linq.XDocument.Parse(tBody[index]).ToString();
             }
         }
 
