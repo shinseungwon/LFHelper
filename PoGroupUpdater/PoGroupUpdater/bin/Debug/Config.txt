@@ -1,6 +1,6 @@
 'pogroupupdater
 
-ip:172.22.8.143
+ip:172.22.13.164
 catalog:KRWMS
 id:superuser
 password:superuser
