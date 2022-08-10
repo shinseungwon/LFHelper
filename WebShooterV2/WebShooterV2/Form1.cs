@@ -109,20 +109,28 @@ namespace WebShooterV2
                 req.Headers[headerLine[0]] = headerLine[1];
             }
 
-            using (Stream stream = req.GetRequestStream())
-            using (StreamWriter sw = new StreamWriter(stream))
-            {
-                sw.Write(content);
-            }
-
             //Get Response
-            HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+            //Try Catch for exception ( 404, 502 ... )
             string result = "";
-
-            using (Stream stream = res.GetResponseStream())
-            using (StreamReader sr = new StreamReader(stream))
+            try
             {
-                result = sr.ReadToEnd();
+                using (Stream stream = req.GetRequestStream())
+                using (StreamWriter sw = new StreamWriter(stream))
+                {
+                    sw.Write(content);
+                }
+
+                HttpWebResponse res = (HttpWebResponse)req.GetResponse();
+
+                using (Stream stream = res.GetResponseStream())
+                using (StreamReader sr = new StreamReader(stream))
+                {
+                    result = sr.ReadToEnd();
+                }
+            }
+            catch (Exception e)
+            {
+                result = e.ToString();
             }
 
             return result;
@@ -173,7 +181,7 @@ namespace WebShooterV2
 
                 lvResult.Items[i].SubItems[0].Text = request.Substring(0, 10);
                 lvResult.Items[i].SubItems[1].Text = response.Substring(0, 10);
-                lvResult.Items[i].SubItems[2].Text = response.Length + "";
+                lvResult.Items[i].SubItems[2].Text = response.Length + "";                
 
                 if (response.Contains(tbResultLike.Text))
                 {
@@ -262,8 +270,16 @@ namespace WebShooterV2
             {
                 if (lvResult.Items[i].Selected)
                 {
-                    tbRequest.Text = System.Xml.Linq.XDocument.Parse(wRequest[i]).ToString();
-                    tbResponse.Text = System.Xml.Linq.XDocument.Parse(wResponse[i]).ToString();
+                    try
+                    {
+                        tbRequest.Text = System.Xml.Linq.XDocument.Parse(wRequest[i]).ToString();
+                        tbResponse.Text = System.Xml.Linq.XDocument.Parse(wResponse[i]).ToString();
+                    }
+                    catch (Exception ex)
+                    {
+                        tbRequest.Text = wRequest[i];
+                        tbResponse.Text = wResponse[i];
+                    }
                 }
             }
         }
