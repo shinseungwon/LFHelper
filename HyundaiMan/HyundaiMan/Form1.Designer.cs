@@ -49,7 +49,6 @@ namespace HyundaiMan
             this.cbCustomer.Name = "cbCustomer";
             this.cbCustomer.Size = new System.Drawing.Size(121, 20);
             this.cbCustomer.TabIndex = 0;
-            this.cbCustomer.SelectedIndexChanged += new System.EventHandler(this.cbCustomer_SelectedIndexChanged);
             // 
             // cbType
             // 
@@ -62,7 +61,6 @@ namespace HyundaiMan
             this.cbType.Name = "cbType";
             this.cbType.Size = new System.Drawing.Size(121, 20);
             this.cbType.TabIndex = 2;
-            this.cbType.SelectedIndexChanged += new System.EventHandler(this.cbType_SelectedIndexChanged);
             // 
             // tbInput
             // 
