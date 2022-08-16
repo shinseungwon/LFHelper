@@ -32,6 +32,12 @@ namespace RegexerV4
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.tbMain = new System.Windows.Forms.TabControl();
             this.tpRegex = new System.Windows.Forms.TabPage();
+            this.lbRegexDelimeter = new System.Windows.Forms.Label();
+            this.tbRegexDelimeter = new System.Windows.Forms.TextBox();
+            this.dgRegexReplace = new System.Windows.Forms.DataGridView();
+            this.From = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.To = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.btRegexReplace = new System.Windows.Forms.Button();
             this.btRegexGo = new System.Windows.Forms.Button();
             this.tbRegexOutput = new System.Windows.Forms.TextBox();
             this.tbRegexInput = new System.Windows.Forms.TextBox();
@@ -47,9 +53,11 @@ namespace RegexerV4
             this.btXmlCheck = new System.Windows.Forms.Button();
             this.tbXmlContent = new System.Windows.Forms.TextBox();
             this.dgXml = new System.Windows.Forms.DataGridView();
-            this.btRegexLtoR = new System.Windows.Forms.Button();
+            this.btRegexUndo = new System.Windows.Forms.Button();
+            this.btRegexRedo = new System.Windows.Forms.Button();
             this.tbMain.SuspendLayout();
             this.tpRegex.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgRegexReplace)).BeginInit();
             this.tpTxt.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTxt)).BeginInit();
             this.tpXml.SuspendLayout();
@@ -70,7 +78,12 @@ namespace RegexerV4
             // 
             // tpRegex
             // 
-            this.tpRegex.Controls.Add(this.btRegexLtoR);
+            this.tpRegex.Controls.Add(this.btRegexRedo);
+            this.tpRegex.Controls.Add(this.btRegexUndo);
+            this.tpRegex.Controls.Add(this.lbRegexDelimeter);
+            this.tpRegex.Controls.Add(this.tbRegexDelimeter);
+            this.tpRegex.Controls.Add(this.dgRegexReplace);
+            this.tpRegex.Controls.Add(this.btRegexReplace);
             this.tpRegex.Controls.Add(this.btRegexGo);
             this.tpRegex.Controls.Add(this.tbRegexOutput);
             this.tpRegex.Controls.Add(this.tbRegexInput);
@@ -83,11 +96,65 @@ namespace RegexerV4
             this.tpRegex.Text = "tpRegex";
             this.tpRegex.UseVisualStyleBackColor = true;
             // 
+            // lbRegexDelimeter
+            // 
+            this.lbRegexDelimeter.AutoSize = true;
+            this.lbRegexDelimeter.Location = new System.Drawing.Point(6, 35);
+            this.lbRegexDelimeter.Name = "lbRegexDelimeter";
+            this.lbRegexDelimeter.Size = new System.Drawing.Size(104, 12);
+            this.lbRegexDelimeter.TabIndex = 7;
+            this.lbRegexDelimeter.Text = "lbRegexDelimeter";
+            // 
+            // tbRegexDelimeter
+            // 
+            this.tbRegexDelimeter.AcceptsReturn = true;
+            this.tbRegexDelimeter.AcceptsTab = true;
+            this.tbRegexDelimeter.Location = new System.Drawing.Point(415, 6);
+            this.tbRegexDelimeter.Multiline = true;
+            this.tbRegexDelimeter.Name = "tbRegexDelimeter";
+            this.tbRegexDelimeter.Size = new System.Drawing.Size(96, 21);
+            this.tbRegexDelimeter.TabIndex = 6;
+            this.tbRegexDelimeter.TextChanged += new System.EventHandler(this.tbRegexDelimeter_TextChanged);
+            // 
+            // dgRegexReplace
+            // 
+            this.dgRegexReplace.AllowUserToOrderColumns = true;
+            this.dgRegexReplace.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgRegexReplace.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.From,
+            this.To});
+            this.dgRegexReplace.Location = new System.Drawing.Point(1049, 102);
+            this.dgRegexReplace.Name = "dgRegexReplace";
+            this.dgRegexReplace.RowTemplate.Height = 23;
+            this.dgRegexReplace.Size = new System.Drawing.Size(247, 492);
+            this.dgRegexReplace.TabIndex = 5;
+            this.dgRegexReplace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.dgRegexReplace_KeyDown);
+            // 
+            // From
+            // 
+            this.From.HeaderText = "From";
+            this.From.Name = "From";
+            // 
+            // To
+            // 
+            this.To.HeaderText = "To";
+            this.To.Name = "To";
+            // 
+            // btRegexReplace
+            // 
+            this.btRegexReplace.Location = new System.Drawing.Point(1049, 3);
+            this.btRegexReplace.Name = "btRegexReplace";
+            this.btRegexReplace.Size = new System.Drawing.Size(247, 23);
+            this.btRegexReplace.TabIndex = 4;
+            this.btRegexReplace.Text = "btRegexReplace";
+            this.btRegexReplace.UseVisualStyleBackColor = true;
+            this.btRegexReplace.Click += new System.EventHandler(this.btRegexReplace_Click);
+            // 
             // btRegexGo
             // 
-            this.btRegexGo.Location = new System.Drawing.Point(1193, 6);
+            this.btRegexGo.Location = new System.Drawing.Point(517, 6);
             this.btRegexGo.Name = "btRegexGo";
-            this.btRegexGo.Size = new System.Drawing.Size(103, 23);
+            this.btRegexGo.Size = new System.Drawing.Size(523, 23);
             this.btRegexGo.TabIndex = 3;
             this.btRegexGo.Text = "btRegexGo";
             this.btRegexGo.UseVisualStyleBackColor = true;
@@ -95,21 +162,21 @@ namespace RegexerV4
             // 
             // tbRegexOutput
             // 
-            this.tbRegexOutput.Location = new System.Drawing.Point(637, 32);
+            this.tbRegexOutput.Location = new System.Drawing.Point(520, 50);
             this.tbRegexOutput.Multiline = true;
             this.tbRegexOutput.Name = "tbRegexOutput";
             this.tbRegexOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbRegexOutput.Size = new System.Drawing.Size(659, 562);
+            this.tbRegexOutput.Size = new System.Drawing.Size(523, 544);
             this.tbRegexOutput.TabIndex = 2;
             this.tbRegexOutput.WordWrap = false;
             // 
             // tbRegexInput
             // 
-            this.tbRegexInput.Location = new System.Drawing.Point(6, 32);
+            this.tbRegexInput.Location = new System.Drawing.Point(3, 50);
             this.tbRegexInput.Multiline = true;
             this.tbRegexInput.Name = "tbRegexInput";
             this.tbRegexInput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbRegexInput.Size = new System.Drawing.Size(625, 562);
+            this.tbRegexInput.Size = new System.Drawing.Size(508, 544);
             this.tbRegexInput.TabIndex = 1;
             this.tbRegexInput.WordWrap = false;
             // 
@@ -118,7 +185,7 @@ namespace RegexerV4
             this.cbRegexFormula.FormattingEnabled = true;
             this.cbRegexFormula.Location = new System.Drawing.Point(6, 6);
             this.cbRegexFormula.Name = "cbRegexFormula";
-            this.cbRegexFormula.Size = new System.Drawing.Size(1073, 20);
+            this.cbRegexFormula.Size = new System.Drawing.Size(406, 20);
             this.cbRegexFormula.TabIndex = 0;
             // 
             // tpTxt
@@ -236,15 +303,25 @@ namespace RegexerV4
             this.dgXml.Size = new System.Drawing.Size(1290, 386);
             this.dgXml.TabIndex = 0;
             // 
-            // btRegexLtoR
+            // btRegexUndo
             // 
-            this.btRegexLtoR.Location = new System.Drawing.Point(1085, 6);
-            this.btRegexLtoR.Name = "btRegexLtoR";
-            this.btRegexLtoR.Size = new System.Drawing.Size(102, 23);
-            this.btRegexLtoR.TabIndex = 4;
-            this.btRegexLtoR.Text = "btRegexLtoR";
-            this.btRegexLtoR.UseVisualStyleBackColor = true;
-            this.btRegexLtoR.Click += new System.EventHandler(this.btRegexLtoR_Click);
+            this.btRegexUndo.Location = new System.Drawing.Point(1049, 30);
+            this.btRegexUndo.Name = "btRegexUndo";
+            this.btRegexUndo.Size = new System.Drawing.Size(247, 23);
+            this.btRegexUndo.TabIndex = 8;
+            this.btRegexUndo.Text = "btRegexUndo";
+            this.btRegexUndo.UseVisualStyleBackColor = true;
+            this.btRegexUndo.Click += new System.EventHandler(this.btRegexUndo_Click);
+            // 
+            // btRegexRedo
+            // 
+            this.btRegexRedo.Location = new System.Drawing.Point(1049, 59);
+            this.btRegexRedo.Name = "btRegexRedo";
+            this.btRegexRedo.Size = new System.Drawing.Size(247, 23);
+            this.btRegexRedo.TabIndex = 9;
+            this.btRegexRedo.Text = "btRegexRedo";
+            this.btRegexRedo.UseVisualStyleBackColor = true;
+            this.btRegexRedo.Click += new System.EventHandler(this.btRegexRedo_Click);
             // 
             // Form1
             // 
@@ -260,6 +337,7 @@ namespace RegexerV4
             this.tbMain.ResumeLayout(false);
             this.tpRegex.ResumeLayout(false);
             this.tpRegex.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgRegexReplace)).EndInit();
             this.tpTxt.ResumeLayout(false);
             this.tpTxt.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgTxt)).EndInit();
@@ -289,7 +367,14 @@ namespace RegexerV4
         private System.Windows.Forms.TextBox tbXmlDirectory;
         private System.Windows.Forms.TextBox tbTxtStarts;
         private System.Windows.Forms.TextBox tbTxtSeq;
-        private System.Windows.Forms.Button btRegexLtoR;
+        private System.Windows.Forms.Button btRegexReplace;
+        private System.Windows.Forms.DataGridView dgRegexReplace;
+        private System.Windows.Forms.DataGridViewTextBoxColumn From;
+        private System.Windows.Forms.DataGridViewTextBoxColumn To;
+        private System.Windows.Forms.TextBox tbRegexDelimeter;
+        private System.Windows.Forms.Label lbRegexDelimeter;
+        private System.Windows.Forms.Button btRegexRedo;
+        private System.Windows.Forms.Button btRegexUndo;
     }
 }
 

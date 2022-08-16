@@ -27,6 +27,9 @@ namespace RegexerV4
 
         public static readonly List<string> Templates = new List<string>();
 
+        public static readonly Stack<string> Undo = new Stack<string>();
+        public static readonly Stack<string> Redo = new Stack<string>();
+
         public Form1()
         {
             InitializeComponent();
@@ -37,23 +40,23 @@ namespace RegexerV4
                 .Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries));
 
             cbRegexFormula.Items.AddRange(Templates.ToArray());
-            if (cbRegexFormula.Items.Count > 0)
-            {
-                cbRegexFormula.SelectedIndex = 0;
-            }
+            cbRegexFormula.SelectedIndex = 0;
+
+            tbRegexDelimeter.Text = "\t";
+            lbRegexDelimeter.Text = "{TAB}";
         }
 
-        private string RegexBuild(string template, string content)
+        private string RegexBuild(string template, string content, string delimeter)
         {
             StringBuilder sb = new StringBuilder();
 
-            string[] contentLines = content.Replace("\r", "").Replace("\t", "")
+            string[] contentLines = content.Replace("\r", "")
                 .Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
 
             foreach (string s in contentLines)
             {
                 string target = template;
-                string[] contents = s.Split(new string[] { " " }
+                string[] contents = s.Split(new string[] { delimeter }
                 , StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < contents.Length; i++)
                 {
@@ -65,10 +68,57 @@ namespace RegexerV4
             return sb.ToString();
         }
 
-        private string RegexLtoR(string content)
+        private string PrintCode(string input)
         {
-            return content.Replace("\r", "").Replace("\n", " ");
+            StringBuilder sb = new StringBuilder();
+
+            char[] arr = input.ToCharArray();
+
+            foreach (char c in arr)
+            {
+                if (c == ' ')
+                {
+                    sb.Append("{SPACE}");
+                }
+                else if (c == '\t')
+                {
+                    sb.Append("{TAB}");
+                }
+                else if (c == '\r')
+                {
+                    sb.Append("{CR}");
+                }
+                else if (c == '\n')
+                {
+                    sb.Append("{LF}");
+                }
+                else
+                {
+                    sb.Append(c);
+                }
+            }
+
+            return sb.ToString();
         }
+
+        //private string[] GetResultArray(string input, string delimeter)
+        //{
+        //    List<string> result = new List<string>();
+
+        //    string[] splitted = input.Split(new string[] { delimeter }
+        //    , StringSplitOptions.RemoveEmptyEntries);
+
+        //    foreach (string s in splitted)
+        //    {
+        //        string trimmed = s.Trim();
+        //        if (trimmed.Length > 0)
+        //        {
+        //            result.Add(trimmed);
+        //        }
+        //    }
+
+        //    return result.ToArray();
+        //}
 
         private DataTable TxtToGrid(string content, string starts, string seq)
         {
@@ -89,7 +139,7 @@ namespace RegexerV4
             , StringSplitOptions.RemoveEmptyEntries);
 
             int[] empty = new int[result.Columns.Count];
-            int x = 0;
+            int x;
 
             foreach (string contentLine in contentLines)
             {
@@ -225,12 +275,26 @@ namespace RegexerV4
 
         private void btRegexGo_Click(object sender, EventArgs e)
         {
-            tbRegexOutput.Text = RegexBuild(cbRegexFormula.Text, tbRegexInput.Text);
+            tbRegexOutput.Text = RegexBuild(cbRegexFormula.Text, tbRegexInput.Text, tbRegexDelimeter.Text);
         }
 
-        private void btRegexLtoR_Click(object sender, EventArgs e)
+        private void btRegexReplace_Click(object sender, EventArgs e)
         {
-            tbRegexOutput.Text = RegexLtoR(tbRegexInput.Text);
+            Undo.Push(tbRegexInput.Text);
+            Redo.Clear();
+
+            //Text
+            string content = tbRegexInput.Text;
+            tbRegexInput.Text = tbRegexInput.Text + "\r\n changed";
+            //~Test
+
+            btRegexUndo.Text = "btRegexUndo (" + Undo.Count() + ")";
+            btRegexRedo.Text = "btRegexRedo (" + Redo.Count() + ")";
+        }
+
+        private void tbRegexDelimeter_TextChanged(object sender, EventArgs e)
+        {
+            lbRegexDelimeter.Text = PrintCode(tbRegexDelimeter.Text);
         }
 
         private void btTxtCheck_Click(object sender, EventArgs e)
@@ -261,6 +325,56 @@ namespace RegexerV4
             dgXml.Columns.Clear();
 
             dgXml.DataSource = XmlToGrid(text, directory);
+        }
+
+        private void dgRegexReplace_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control && e.KeyCode == Keys.V)
+            {
+                dgRegexReplace.Rows.Clear();
+
+                string content = Clipboard.GetText();
+
+                string[] contentLines = content.Replace("\r", "")
+                    .Split(new string[] { "\n" }
+                    , StringSplitOptions.RemoveEmptyEntries);
+
+                foreach (string contentLine in contentLines)
+                {
+                    string[] contentItems = contentLine
+                        .Split(new string[] { "\t" }
+                        , StringSplitOptions.RemoveEmptyEntries);
+
+                    if (contentItems.Length == 2)
+                    {
+                        dgRegexReplace.Rows.Add(contentItems[0], contentItems[1]);
+                    }
+                }
+            }
+        }
+
+        private void btRegexUndo_Click(object sender, EventArgs e)
+        {
+            if (Undo.Count > 0)
+            {
+                Redo.Push(tbRegexInput.Text);
+                tbRegexInput.Text = Undo.Pop();
+
+                btRegexUndo.Text = "btRegexUndo (" + Undo.Count() + ")";
+                btRegexRedo.Text = "btRegexRedo (" + Redo.Count() + ")";
+            }
+        }
+
+        private void btRegexRedo_Click(object sender, EventArgs e)
+        {
+            if (Redo.Count > 0)
+            {
+                Undo.Push(tbRegexInput.Text);
+                tbRegexInput.Text = Redo.Pop();
+
+                btRegexUndo.Text = "btRegexUndo (" + Undo.Count() + ")";
+                btRegexRedo.Text = "btRegexRedo (" + Redo.Count() + ")";
+            }
         }
     }
 }
