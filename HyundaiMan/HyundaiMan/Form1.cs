@@ -53,7 +53,7 @@ namespace HyundaiMan
             //tbInput.Text = "22080800805399" + Environment.NewLine + "22080800805287"; //aos order
             //tbInput.Text = "22080800805510" + Environment.NewLine + "22080800805258"; //ark order
 
-            tbInput.Text = "22080400720498" + Environment.NewLine + "22080300717681"; //cos return
+            //tbInput.Text = "22080400720498" + Environment.NewLine + "22080300717681"; //cos return
             //tbInput.Text = "22073000717030" + Environment.NewLine + "22073000716815"; //aos return
             //tbInput.Text = "22080600769076" + Environment.NewLine + "22072800669273"; //ark return
             //~TestCase
