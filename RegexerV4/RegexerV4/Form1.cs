@@ -101,25 +101,6 @@ namespace RegexerV4
             return sb.ToString();
         }
 
-        //private string[] GetResultArray(string input, string delimeter)
-        //{
-        //    List<string> result = new List<string>();
-
-        //    string[] splitted = input.Split(new string[] { delimeter }
-        //    , StringSplitOptions.RemoveEmptyEntries);
-
-        //    foreach (string s in splitted)
-        //    {
-        //        string trimmed = s.Trim();
-        //        if (trimmed.Length > 0)
-        //        {
-        //            result.Add(trimmed);
-        //        }
-        //    }
-
-        //    return result.ToArray();
-        //}
-
         private DataTable TxtToGrid(string content, string starts, string seq)
         {
             DataTable result = new DataTable();
@@ -283,10 +264,21 @@ namespace RegexerV4
             Undo.Push(tbRegexInput.Text);
             Redo.Clear();
 
-            //Text
             string content = tbRegexInput.Text;
-            tbRegexInput.Text = tbRegexInput.Text + "\r\n changed";
-            //~Test
+
+            foreach (DataGridViewRow row in dgRegexReplace.Rows)
+            {
+                string from = row.Cells[0].Value?.ToString() ?? ""
+                    , to = row.Cells[1].Value?.ToString() ?? "";
+
+                if (from.Length > 0 && to.Length > 0)
+                {
+                    from = from.Replace("{TAB}", "\t").Replace("{CR}", "\r").Replace("{LF}", "\n");
+                    to = to.Replace("{TAB}", "\t").Replace("{CR}", "\r").Replace("{LF}", "\n");
+                    content = content.Replace(from, to);
+                }
+            }
+            tbRegexInput.Text = content;
 
             btRegexUndo.Text = "btRegexUndo (" + Undo.Count() + ")";
             btRegexRedo.Text = "btRegexRedo (" + Redo.Count() + ")";
