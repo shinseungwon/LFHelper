@@ -227,10 +227,12 @@ namespace HyundaiMan
                         xmlParse(result);
 
                         List<string[]> resultLines = xmlParse(result);
+                        lvResult.BeginUpdate();
                         foreach (string[] sa in resultLines)
                         {
                             lvResult.Items.Add(new ListViewItem(sa));
                         }
+                        lvResult.EndUpdate();
                     }
                 }
             }
