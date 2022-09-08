@@ -1,6 +1,0 @@
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\bin\Release\HelperDotNet.dll
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\bin\Release\HelperDotNet.pdb
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\obj\Release\HelperDotNet.csproj.AssemblyReference.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\obj\Release\HelperDotNet.csproj.CoreCompileInputs.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\obj\Release\HelperDotNet.dll
-C:\Users\JeffreyShin\source\repos\LFHelper\HelperDotNet\obj\Release\HelperDotNet.pdb
