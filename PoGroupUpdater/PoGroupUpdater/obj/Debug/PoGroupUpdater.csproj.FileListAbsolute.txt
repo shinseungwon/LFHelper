@@ -1,9 +1,0 @@
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\bin\Debug\PoGroupUpdater.exe.config
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\bin\Debug\PoGroupUpdater.exe
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\bin\Debug\PoGroupUpdater.pdb
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\bin\Debug\HelperDotNet.dll
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\bin\Debug\HelperDotNet.pdb
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.csproj.AssemblyReference.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.csproj.CoreCompileInputs.cache
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.exe
-C:\Users\JeffreyShin\source\repos\LFHelper\PoGroupUpdater\PoGroupUpdater\obj\Debug\PoGroupUpdater.pdb
